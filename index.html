@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Favicon (multiple versions for different devices) -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    
+    <!-- For modern browsers (PNG) -->
+    <link rel="icon" type="image/png" href="assets/images/logo.png">
+    
+    <!-- For Apple devices -->
+    <link rel="apple-touch-icon" href="assets/images/logo.png">
+    
+    <!-- For Windows 8/10 (Tile icon) -->
+    <meta name="msapplication-TileImage" content="assets/images/logo.png">
+    
+    <title>NullLynx | Cybersecurity Specialist</title>
+    <title>NullLynx | Bug Bounty Hunter</title>
+    <meta name="description" content="Asanul Hoque Esan (Zen Neo) - Professional Bug Bounty Hunter, Penetration Tester, and Ethical Hacker">
+    <meta name="keywords" content="bug bounty, penetration testing, ethical hacking, cybersecurity, CTF">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
+    
+</head>
+<body>
+    <!-- Particle Background -->
+    <div id="particles-js"></div>
+    
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="loader">
+            <div class="loader-square"></div>
+            <div class="loader-square"></div>
+            <div class="loader-square"></div>
+            <div class="loader-square"></div>
+            <div class="loader-square"></div>
+            <div class="loader-square"></div>
+            <div class="loader-square"></div>
+        </div>
+    </div>
+
+    <!-- Header/Navigation -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <a href="#home">NullLynx</a>
+            </div>
+            <nav class="navbar">
+                <ul class="nav-links">
+                    <li><a href="#home" class="nav-link">Home</a></li>
+                    <li><a href="#about" class="nav-link">About</a></li>
+                    <li><a href="#skills" class="nav-link">Skills</a></li>
+                    <li><a href="#achievements" class="nav-link">Achievements</a></li>
+                    <li><a href="#reports" class="nav-link">Reports</a></li>
+                    <li><a href="#contact" class="nav-link">Contact</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Home Section -->
+        <section id="home" class="section home-section">
+            <div class="container">
+                <div class="home-content">
+                    <div class="home-text">
+                        <h4 class="greeting">Hello, I'm</h4>
+                        <h1 class="name">Asanul Hoque Esan</h1>
+                        <h2 class="title"><span class="typing-text"></span><span class="cursor">|</span></h2>
+                        <p class="description">I hunt vulnerabilities for a living and help organizations secure their digital assets through ethical hacking and penetration testing.</p>
+                        <div class="home-buttons">
+                            <a href="#contact" class="btn primary-btn">Contact Me</a>
+                            <a href="assets/resume.pdf" download class="btn secondary-btn">Download CV</a>
+                        </div>
+                    </div>
+                    <div class="home-image">
+                        <div class="image-wrapper">
+                            <img src="assets/images/profile.jpg" alt="Asanul Hoque Esan" class="profile-img">
+                            <div class="glow-effect"></div>
+                            <div class="cyber-border"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="section about-section">
+            <div class="container">
+                <h2 class="section-title">About <span>Me</span></h2>
+                <div class="about-content">
+                    <div class="about-image">
+                        <div class="hexagon-wrapper">
+                            <div class="hexagon">
+                                <img src="assets/images/avatar.jpg" alt="Asanul Hoque Esan">
+                            </div>
+                            <div class="hexagon-border"></div>
+                        </div>
+                    </div>
+                    <div class="about-text">
+                        <h3>Asanul Hoque Esan - The Bug Bounty Hunter</h3>
+                        <p>I'm a professional bug bounty hunter and penetration tester with over 5 years of experience in cybersecurity. My journey began when I discovered my passion for hacking through Capture The Flag competitions.</p>
+                        <p>I specialize in web application security, network penetration testing, and vulnerability assessment. My approach combines technical expertise with creative problem-solving to identify security flaws that others might miss.</p>
+                        <div class="about-stats">
+                            <div class="stat-item">
+                                <span class="stat-number">200+</span>
+                                <span class="stat-label">Vulnerabilities Found</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">50+</span>
+                                <span class="stat-label">Happy Clients</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">100%</span>
+                                <span class="stat-label">Ethical Approach</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="section skills-section">
+            <div class="container">
+                <h2 class="section-title">My <span>Skills</span></h2>
+                <div class="skills-content">
+                    <div class="skills-categories">
+                        <div class="category active" data-category="pentesting">Penetration Testing</div>
+                        <div class="category" data-category="web">Web Security</div>
+                        <div class="category" data-category="network">Network Security</div>
+                        <div class="category" data-category="tools">Tools</div>
+                    </div>
+                    <div class="skills-items">
+                        <!-- Penetration Testing Skills -->
+                        <div class="skills-grid pentesting show">
+                            <div class="skill-item">
+                                <div class="skill-icon">
+                                    <i class="fas fa-shield-alt"></i>
+                                </div>
+                                <h3>Vulnerability Assessment</h3>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="95%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon">
+                                    <i class="fas fa-bug"></i>
+                                </div>
+                                <h3>Exploit Development</h3>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="85%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon">
+                                    <i class="fas fa-lock"></i>
+                                </div>
+                                <h3>Privilege Escalation</h3>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="90%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon">
+                                    <i class="fas fa-terminal"></i>
+                                </div>
+                                <h3>Post-Exploitation</h3>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="80%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Web Security Skills -->
+                        <div class="skills-grid web">
+                            <div class="skill-item">
+                                <div class="skill-icon">
+                                    <i class="fas fa-code"></i>
+                                </div>
+                                <h3>XSS</h3>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="98%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon">
+                                    <i class="fas fa-database"></i>
+                                </div>
+                                <h3>SQL Injection</h3>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="95%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon">
+                                    <i class="fas fa-server"></i>
+                                </div>
+                                <h3>CSRF</h3>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="90%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon">
+                                    <i class="fas fa-server"></i>
+                                </div>
+                                <h3>CSRF</h3>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="90%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon">
+                                    <i class="fas fa-server"></i>
+                                </div>
+                                <h3>CSRF</h3>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="90%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon">
+                                    <i class="fas fa-server"></i>
+                                </div>
+                                <h3>CSRF</h3>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="90%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon">
+                                    <i class="fas fa-server"></i>
+                                </div>
+                                <h3>CSRF</h3>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="90%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon">
+                                    <i class="fas fa-server"></i>
+                                </div>
+                                <h3>CSRF</h3>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="90%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon">
+                                    <i class="fas fa-server"></i>
+                                </div>
+                                <h3>CSRF</h3>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="90%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon">
+                                    <i class="fas fa-server"></i>
+                                </div>
+                                <h3>CSRF</h3>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="90%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon">
+                                    <i class="fas fa-server"></i>
+                                </div>
+                                <h3>CSRF</h3>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="90%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon">
+                                    <i class="fas fa-shield-virus"></i>
+                                </div>
+                                <h3>SSRF</h3>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="92%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Network Security Skills -->
+                        <div class="skills-grid network">
+                            <div class="skill-item">
+                                <div class="skill-icon">
+                                    <i class="fas fa-network-wired"></i>
+                                </div>
+                                <h3>Network Scanning</h3>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="88%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon">
+                                    <i class="fas fa-wifi"></i>
+                                </div>
+                                <h3>Wireless Security</h3>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="85%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon">
+                                    <i class="fas fa-fire"></i>
+                                </div>
+                                <h3>Firewall Bypassing</h3>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="82%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon">
+                                    <i class="fas fa-broadcast-tower"></i>
+                                </div>
+                                <h3>MITM Attacks</h3>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="90%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Tools Skills -->
+                        <div class="skills-grid tools">
+                            <div class="skill-item">
+                                <div class="skill-icon">
+                                    <i class="fas fa-terminal"></i>
+                                </div>
+                                <h3>Burp Suite</h3>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="97%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon">
+                                    <i class="fas fa-terminal"></i>
+                                </div>
+                                <h3>Burp Suite</h3>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="97%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon">
+                                    <i class="fas fa-terminal"></i>
+                                </div>
+                                <h3>Burp Suite</h3>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="97%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon">
+                                    <i class="fas fa-terminal"></i>
+                                </div>
+                                <h3>Burp Suite</h3>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="97%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon">
+                                    <i class="fas fa-terminal"></i>
+                                </div>
+                                <h3>Burp Suite</h3>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="97%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon">
+                                    <i class="fas fa-terminal"></i>
+                                </div>
+                                <h3>Burp Suite</h3>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="97%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon">
+                                    <i class="fas fa-terminal"></i>
+                                </div>
+                                <h3>Burp Suite</h3>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="97%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon">
+                                    <i class="fas fa-terminal"></i>
+                                </div>
+                                <h3>Burp Suite</h3>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="97%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon">
+                                    <i class="fas fa-terminal"></i>
+                                </div>
+                                <h3>Burp Suite</h3>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="97%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="skill-item">
+                                <div class="skill-icon">
+                                    <i class="fas fa-terminal"></i>
+                                </div>
+                                <h3>Metasploit</h3>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="90%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon">
+                                    <i class="fas fa-terminal"></i>
+                                </div>
+                                <h3>Nmap</h3>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="95%"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-icon">
+                                    <i class="fas fa-terminal"></i>
+                                </div>
+                                <h3>OWASP ZAP</h3>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="92%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Achievements Section -->
+        <section id="achievements" class="section achievements-section">
+            <div class="container">
+                <h2 class="section-title">My <span>Achievements</span></h2>
+                <div class="achievements-content">
+                    <div class="achievements-grid">
+                        <div class="achievement-card">
+                            <div class="achievement-icon">
+                                <img src="assets/hackerone.png" alt="HackerOne">
+                            </div>
+                            <h3>HackerOne</h3>
+                            <p>Top 1% Researcher with 150+ valid vulnerabilities reported</p>
+                            <div class="achievement-stats">
+                                <span class="stat">$250k+</span>
+                                <span class="stat-label">Total Bounty</span>
+                            </div>
+                            <a href="https://hackerone.com/zenneo" target="_blank" class="achievement-link">View Profile <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                        <div class="achievement-card">
+                            <div class="achievement-icon">
+                                <img src="assets/bugcrowd.png" alt="Bugcrowd">
+                            </div>
+                            <h3>Bugcrowd</h3>
+                            <p>Elite Hunter with consistent top rankings in private programs</p>
+                            <div class="achievement-stats">
+                                <span class="stat">Hall of Fame</span>
+                                <span class="stat-label">50+ Companies</span>
+                            </div>
+                            <a href="https://bugcrowd.com/zenneo" target="_blank" class="achievement-link">View Profile <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                        <div class="achievement-card">
+                            <div class="achievement-icon">
+                                <img src="assets/intigriti.png" alt="Intigriti">
+                            </div>
+                            <h3>Intigriti</h3>
+                            <p>Top researcher with multiple critical vulnerabilities found</p>
+                            <div class="achievement-stats">
+                                <span class="stat">Top 10</span>
+                                <span class="stat-label">Quarterly Rankings</span>
+                            </div>
+                            <a href="https://intigriti.com/zenneo" target="_blank" class="achievement-link">View Profile <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                        <div class="achievement-card">
+                            <div class="achievement-icon">
+                                <img src="assets/ctf.png" alt="CTF">
+                            </div>
+                            <h3>CTF Competitions</h3>
+                            <p>Multiple wins in international Capture The Flag competitions</p>
+                            <div class="achievement-stats">
+                                <span class="stat">1st Place</span>
+                                <span class="stat-label">5+ Events</span>
+                            </div>
+                            <a href="#" class="achievement-link">View Certificates <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <div class="achievements-badges">
+                        <h3>Certifications & Badges</h3>
+                        <div class="badges-grid">
+                            <div class="badge-item" data-tooltip="Offensive Security Certified Professional">
+                                <img src="assets/oscp.png" alt="OSCP">
+                            </div>
+                            <div class="badge-item" data-tooltip="Certified Ethical Hacker">
+                                <img src="assets/ceh.png" alt="CEH">
+                            </div>
+                            <div class="badge-item" data-tooltip="Certified Web Security Professional">
+                                <img src="assets/cwsp.png" alt="CWSP">
+                            </div>
+                            <div class="badge-item" data-tooltip="eLearnSecurity Web Application Penetration Tester">
+                                <img src="assets/ewpt.png" alt="EWPT">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+      
+        <!-- Reports Section -->
+<section id="reports" class="section reports-section">
+    <div class="container">
+        <h2 class="section-title">My <span>Reports</span></h2>
+        <div class="reports-content">
+            <div class="reports-grid">
+                <!-- Reports will be dynamically loaded here -->
+            </div>
+            <div class="reports-controls">
+                <button id="seeMoreBtn" class="btn primary-btn">See More....</button>
+                <button id="showLessBtn" class="btn secondary-btn" style="display: none;">Show Less</button>
+            </div>
+        </div>
+    </div>
+</section>
+        <!-- Contact Section -->
+        <section id="contact" class="section contact-section">
+            <div class="container">
+                <h2 class="section-title">Get In <span>Touch</span></h2>
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <h3>Let's Talk About Security</h3>
+                        <p>Interested in securing your systems or collaborating on a project? Reach out through any of these channels:</p>
+                        <div class="info-items">
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div class="info-text">
+                                    <h4>Email</h4>
+                                    <a href="mailto:nulllynx0@gmail.com">nulllynx0@gmail.com</a><br>
+                                    <a href="mailto:NullLynx@proton.me">NullLynx@proton.me</a>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div class="info-text">
+                                    <h4>Location</h4>
+                                    <span>Dhaka, Bangladesh</span>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-phone-alt"></i>
+                                </div>
+                                <div class="info-text">
+                                    <h4>Whatsapp Me</h4>
+                                    <a href="https://wa.me/+8801323645550">+880 1323645550</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="contact-social">
+                            <h4>Follow Me</h4>
+                            <div class="social-links">
+                                <a href="https://www.facebook.com/ah.esan.90" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                                <a href="https://twitter.com/zenneo" target="_blank"><i class="fab fa-twitter"></i></a>
+                                <a href="https://instagram.com/zenneo" target="_blank"><i class="fab fa-instagram"></i></a>
+                                <a href="https://t.me/zenneo" target="_blank"><i class="fab fa-telegram-plane"></i></a>
+                                <a href="https://threads.net/zenneo" target="_blank"><i class="fab fa-threads"></i></a>
+                                <a href="https://github.com/zenneo" target="_blank"><i class="fab fa-github"></i></a>
+                                <a href="https://linkedin.com/in/zenneo" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="contact-form">
+                        <form id="contactForm" action="#" method="POST">
+                            <div class="form-group">
+                                <input type="text" name="name" id="name" required>
+                                <label for="name">Your Name</label>
+                                <span class="focus-border"></span>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" name="email" id="email" required>
+                                <label for="email">Your Email</label>
+                                <span class="focus-border"></span>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="subject" id="subject" required>
+                                <label for="subject">Subject</label>
+                                <span class="focus-border"></span>
+                            </div>
+                            <div class="form-group">
+                                <textarea name="message" id="message" required></textarea>
+                                <label for="message">Your Message</label>
+                                <span class="focus-border"></span>
+                            </div>
+                            <button type="submit" class="btn primary-btn">Send Message <i class="fas fa-paper-plane"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="#home">Zen Neo</a>
+                    <p>Cybersecurity Specialist & Bug Bounty Hunter</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#skills">Skills</a></li>
+                        <li><a href="#achievements">Achievements</a></li>
+                        <li><a href="#reports" >Reports</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-services">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="#">Penetration Testing</a></li>
+                        <li><a href="#">Vulnerability Assessment</a></li>
+                        <li><a href="#">Security Consulting</a></li>
+                        <li><a href="#">Bug Bounty Hunting</a></li>
+                        <li><a href="#">Security Training</a></li>
+                    </ul>
+                </div>
+                <div class="footer-newsletter">
+                    <h4>Security Newsletter</h4>
+                    <p>Subscribe to get the latest security tips and vulnerabilities</p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Your Email">
+                        <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="copyright">
+                    <p>&copy; <span id="year"></span> Asanul Hoque Esan (Zen Neo). All Rights Reserved.</p>
+                </div>
+                <div class="footer-social">
+                    <a href="https://www.facebook.com/ah.esan.90"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-x"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-telegram-plane"></i></a>
+                    <a href="#"><i class="fab fa-threads"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <a href="#home" class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="assets/js/script.js"></script>
+    <script src="assets/js/particles.js"></script>
+</body>
+</html>
