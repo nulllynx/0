@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<!-- MODIFIED: Removed scroll-smooth default, JS will handle theme -->
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,6 +17,7 @@
     <!-- 1. Tailwind Configuration -->
     <script>
         tailwind.config = {
+            darkMode: 'class', // <-- NEW: Added dark mode strategy
             theme: {
                 extend: {
                     colors: {
@@ -25,13 +27,22 @@
                         secondary: "#06E6B3", // Secondary Teal
                         textMain: "#E8EEF3", // Primary Text
                         textMuted: "#97A0AA", // Secondary Text
+
+                        // NEW: Light Mode Colors
+                        light: {
+                            bg: "#f8f9fa",
+                            card: "#ffffff",
+                            textMain: "#212529",
+                            textMuted: "#5c677d",
+                            primary: "#007bff", // Using a standard blue for light mode
+                            secondary: "#17a2b8" // Using a standard cyan for light mode
+                        }
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
                         mono: ['JetBrains Mono', 'monospace'],
                     },
                     animation: {
-                        /* MODIFIED: Changed 30s to 80s and 90s for smoother scroll */
                         'scroll-left': 'scrollLeft 80s linear infinite',
                         'scroll-right': 'scrollRight 90s linear infinite',
                         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
@@ -64,15 +75,30 @@
     <style>
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0a0f1c; }
-        ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 4px; }
+        ::-webkit-scrollbar-track { 
+            background: #f1f1f1; /* Light mode track */
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: #0a0f1c; /* Dark mode track */
+        }
+        ::-webkit-scrollbar-thumb { 
+            background: #c1c1c1; 
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #1f2937;
+        }
         ::-webkit-scrollbar-thumb:hover { background: #00C2FF; }
         
         /* Glassmorphism for Nav */
         .glass {
-            background: rgba(10, 15, 28, 0.7); /* bg-bg with 70% opacity */
+            /* MODIFIED: Default to light glass */
+            background: rgba(248, 249, 250, 0.7); /* light.bg with 70% opacity */
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+        }
+        .dark .glass {
+            background: rgba(10, 15, 28, 0.7); /* dark:bg-bg with 70% opacity */
         }
         
         /* Typing Cursor */
@@ -102,28 +128,48 @@
             opacity: 1;
             transform: scale(1.1);
             z-index: 10;
-            border-color: #00C2FF;
-            box-shadow: 0 0 15px rgba(0, 194, 255, 0.3);
+            /* MODIFIED: Use Tailwind variables */
+            border-color: theme('colors.light.primary');
+            box-shadow: 0 0 15px theme('colors.light.primary / 30%');
+        }
+        .dark .marquee-container:hover .marquee-item:hover {
+            border-color: theme('colors.primary');
+            box-shadow: 0 0 15px theme('colors.primary / 30%');
         }
 
         /* Gradient Button Glow */
         .btn-gradient {
-            background-image: linear-gradient(to right, #00C2FF, #0099cc);
-            box-shadow: 0 0 20px rgba(0, 194, 255, 0.3);
+            /* MODIFIED: Light mode gradient */
+            background-image: linear-gradient(to right, theme('colors.light.primary'), #0056b3);
+            box-shadow: 0 0 20px theme('colors.light.primary / 30%');
+            color: white; /* Light mode text is white on gradient */
+        }
+        .dark .btn-gradient {
+            background-image: linear-gradient(to right, theme('colors.primary'), #0099cc);
+            box-shadow: 0 0 20px theme('colors.primary / 30%');
+            color: theme('colors.textMain');
         }
         .btn-gradient:hover {
-            box-shadow: 0 0 30px rgba(0, 194, 255, 0.5);
+            /* MODIFIED: Light mode shadow */
+            box-shadow: 0 0 30px theme('colors.light.primary / 50%');
             transform: translateY(-2px);
+        }
+        .dark .btn-gradient:hover {
+            box-shadow: 0 0 30px theme('colors.primary / 50%');
         }
 
         /* Modal Styles */
         .modal-overlay {
-            background: rgba(10, 15, 28, 0.7); /* bg-bg with 70% opacity */
+            /* MODIFIED: Light mode overlay */
+            background: rgba(248, 249, 250, 0.7); /* light.bg with 70% opacity */
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
         }
+        .dark .modal-overlay {
+            background: rgba(10, 15, 28, 0.7); /* dark:bg-bg with 70% opacity */
+        }
 
-        /* --- Nav Link Underline Styles --- */
+        /* --- Desktop Nav Link Underline Styles --- */
         .nav-link {
             position: relative;
             padding-bottom: 4px; /* Space for underline */
@@ -137,13 +183,20 @@
             transform: translateX(-50%);
             width: 0;
             height: 2px;
-            background-color: #00C2FF; /* primary color */
+            /* MODIFIED: Light mode underline */
+            background-color: theme('colors.light.primary');
             transition: width 0.3s ease-in-out;
+        }
+        .dark .nav-link::after {
+            background-color: theme('colors.primary');
         }
         
         /* Active state for normal links */
         .nav-link.nav-active {
-            color: #00C2FF; /* text-primary */
+            color: theme('colors.light.primary');
+        }
+        .dark .nav-link.nav-active {
+            color: theme('colors.primary');
         }
         .nav-link.nav-active::after {
             width: 100%;
@@ -151,51 +204,100 @@
         
         /* Override for hover */
         .nav-link:hover {
-             color: #00C2FF;
+             color: theme('colors.light.primary');
+        }
+        .dark .nav-link:hover {
+             color: theme('colors.primary');
         }
 
         /* Special override for [ENCRYPT] link */
         .nav-link[href="#ENCRYPT"] {
-            color: #06E6B3; /* text-secondary by default */
+            color: theme('colors.light.secondary');
+        }
+        .dark .nav-link[href="#ENCRYPT"] {
+            color: theme('colors.secondary');
         }
         .nav-link[href="#ENCRYPT"]:hover {
-            color: #E8EEF3; /* textMain (white) on hover */
+            color: theme('colors.light.textMain');
+        }
+        .dark .nav-link[href="#ENCRYPT"]:hover {
+            color: theme('colors.textMain');
         }
         .nav-link[href="#ENCRYPT"].nav-active {
-            color: #06E6B3; /* text-secondary when active */
+            color: theme('colors.light.secondary');
+        }
+        .dark .nav-link[href="#ENCRYPT"].nav-active {
+            color: theme('colors.secondary');
         }
         .nav-link[href="#ENCRYPT"].nav-active::after {
-            background-color: #06E6B3; /* secondary color underline */
+            background-color: theme('colors.light.secondary');
         }
-        /* --- END OF NEW STYLES --- */
+        .dark .nav-link[href="#ENCRYPT"].nav-active::after {
+            background-color: theme('colors.secondary');
+        }
+        
+        /* --- Mobile Nav Link Styles --- */
+        .nav-link-mobile {
+            transition: color 0.3s ease, background-color 0.3s ease;
+        }
+        /* Mobile active state */
+        .nav-link-mobile.nav-active {
+            color: theme('colors.light.primary') !important;
+            background-color: theme('colors.light.primary / 10%');
+        }
+        .dark .nav-link-mobile.nav-active {
+            color: theme('colors.primary') !important;
+            background-color: theme('colors.primary / 10%');
+        }
+        
+        /* Special override for [ENCRYPT] link (mobile) */
+        .nav-link-mobile[href="#ENCRYPT"] {
+            color: theme('colors.light.secondary');
+        }
+        .dark .nav-link-mobile[href="#ENCRYPT"] {
+            color: theme('colors.secondary');
+        }
+        .nav-link-mobile[href="#ENCRYPT"].nav-active {
+            color: theme('colors.light.secondary') !important;
+            background-color: theme('colors.light.secondary / 10%');
+        }
+        .dark .nav-link-mobile[href="#ENCRYPT"].nav-active {
+            color: theme('colors.secondary') !important;
+            background-color: theme('colors.secondary / 10%');
+        }
     </style>
 </head>
-<body class="bg-bg text-textMain selection:bg-primary/30 overflow-x-hidden">
+<!-- MODIFIED: Added light mode classes -->
+<body class="bg-light-bg dark:bg-bg text-light-textMain dark:text-textMain selection:bg-primary/30 overflow-x-hidden transition-colors duration-300">
 
     <!-- NEW: Preloader -->
-    <div id="preloader" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-bg">
-        <div class="font-mono text-secondary text-center">
-            <div class="text-4xl animate-blink-brackets text-primary">
-                [<span id="loader-text" class="text-secondary mx-2"></span>]
+    <!-- MODIFIED: Added light mode classes -->
+    <div id="preloader" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-light-bg dark:bg-bg">
+        <div class="font-mono text-center">
+            <div class="text-4xl animate-blink-brackets text-light-primary dark:text-primary">
+                [<span id="loader-text" class="text-light-secondary dark:text-secondary mx-2"></span>]
             </div>
-            <p class="mt-4 text-primary animate-pulse" id="loader-status">BOOTING KERNEL...</p>
+            <p class="mt-4 text-light-primary dark:text-primary animate-pulse" id="loader-status">BOOTING KERNEL...</p>
         </div>
     </div>
     <!-- END Preloader -->
 
     <!-- 3. NAVIGATION -->
-    <nav class="fixed w-full z-50 glass border-b border-white/10">
+    <!-- MODIFIED: Added light mode border -->
+    <nav class="fixed w-full z-50 glass border-b border-gray-200 dark:border-white/10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <!-- Logo -->
                 <div class="flex items-center gap-2">
-                    <i data-lucide="terminal" class="text-primary w-6 h-6"></i>
-                    <span class="font-bold text-xl tracking-tighter text-white">Null<span class="text-primary">Lynx</span></span>
+                    <i data-lucide="terminal" class="text-light-primary dark:text-primary w-6 h-6"></i>
+                    <!-- MODIFIED: Added light mode text -->
+                    <span class="font-bold text-xl tracking-tighter text-light-textMain dark:text-white">null<span class="text-light-primary dark:text-primary">lynx</span></span>
                 </div>
                 
                 <!-- Desktop Menu -->
-                <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-4 font-mono text-sm uppercase" id="desktop-nav-links">
+                <div class="hidden md:flex items-center"> <!-- MODIFIED: Added flex and items-center -->
+                    <!-- MODIFIED: Text muted light mode -->
+                    <div class="ml-10 flex items-baseline space-x-4 font-mono text-sm uppercase text-light-textMuted dark:text-textMain" id="desktop-nav-links">
                         <a href="#STATUS" class="nav-link px-2 py-1">STATUS</a>
                         <a href="#PROFILE" class="nav-link px-2 py-1">PROFILE</a>
                         <a href="#ANALYSIS" class="nav-link px-2 py-1">ANALYSIS</a>
@@ -204,11 +306,23 @@
                         <a href="#ACCESS_LOG" class="nav-link px-2 py-1">ACCESS_LOG</a>
                         <a href="#ENCRYPT" class="nav-link px-2 py-1">[ENCRYPT]</a>
                     </div>
+
+                    <!-- NEW: Theme Toggle (Desktop) -->
+                    <button id="theme-toggle-desktop" class="ml-4 p-2 rounded-full text-light-textMuted dark:text-textMuted hover:text-light-primary dark:hover:text-primary hover:bg-black/10 dark:hover:bg-white/10">
+                        <i data-lucide="sun" class="w-5 h-5 hidden" id="theme-icon-sun-desktop"></i>
+                        <i data-lucide="moon" class="w-5 h-5" id="theme-icon-moon-desktop"></i>
+                    </button>
                 </div>
 
                 <!-- Mobile Menu Button -->
-                <div class="md:hidden">
-                    <button id="menu-btn" class="text-textMain hover:text-primary p-2">
+                <!-- MODIFIED: Added flex and items-center -->
+                <div class="md:hidden flex items-center">
+                    <!-- NEW: Theme Toggle (Mobile) -->
+                    <button id="theme-toggle-mobile" class="p-2 rounded-full text-light-textMuted dark:text-textMuted hover:text-light-primary dark:hover:text-primary">
+                        <i data-lucide="sun" class="w-5 h-5 hidden" id="theme-icon-sun-mobile"></i>
+                        <i data-lucide="moon" class="w-5 h-5" id="theme-icon-moon-mobile"></i>
+                    </button>
+                    <button id="menu-btn" class="text-light-textMain dark:text-textMain hover:text-light-primary dark:hover:text-primary p-2">
                         <i data-lucide="menu" id="menu-icon-open" class="block h-6 w-6"></i>
                         <i data-lucide="x" id="menu-icon-close" class="hidden h-6 w-6"></i>
                     </button>
@@ -216,15 +330,16 @@
             </div>
         </div>
         <!-- Mobile Dropdown -->
-        <div id="mobile-menu" class="hidden md:hidden bg-card border-b border-white/10">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 font-mono uppercase">
-                <a href="#STATUS" class="block px-3 py-2 rounded-md hover:bg-white/5 hover:text-primary">STATUS</a>
-                <a href="#PROFILE" class="block px-3 py-2 rounded-md hover:bg-white/5 hover:text-primary">PROFILE</a>
-                <a href="#ANALYSIS" class="block px-3 py-2 rounded-md hover:bg-white/5 hover:text-primary">ANALYSIS</a>
-                <a href="#ACCOMPLISH" class="block px-3 py-2 rounded-md hover:bg-white/5 hover:text-primary">ACCOMPLISH</a>
-                <a href="#DOCUMENTS" class="block px-3 py-2 rounded-md hover:bg-white/5 hover:text-primary">DOCUMENTS</a>
-                <a href="#ACCESS_LOG" class="block px-3 py-2 rounded-md hover:bg-white/5 hover:text-primary">ACCESS_LOG</a>
-                <a href="#ENCRYPT" class="block px-3 py-2 rounded-md hover:bg-white/5 text-secondary">ENCRYPT TOOL</a>
+        <!-- MODIFIED: Added light mode classes -->
+        <div id="mobile-menu" class="hidden md:hidden bg-light-card dark:bg-card border-b border-gray-200 dark:border-white/10">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 font-mono uppercase" id="mobile-nav-links">
+                <a href="#STATUS" class="nav-link-mobile block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-white/5 hover:text-light-primary dark:hover:text-primary">STATUS</a>
+                <a href="#PROFILE" class="nav-link-mobile block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-white/5 hover:text-light-primary dark:hover:text-primary">PROFILE</a>
+                <a href="#ANALYSIS" class="nav-link-mobile block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-white/5 hover:text-light-primary dark:hover:text-primary">ANALYSIS</a>
+                <a href="#ACCOMPLISH" class="nav-link-mobile block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-white/5 hover:text-light-primary dark:hover:text-primary">ACCOMPLISH</a>
+                <a href="#DOCUMENTS" class="nav-link-mobile block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-white/5 hover:text-light-primary dark:hover:text-primary">DOCUMENTS</a>
+                <a href="#ACCESS_LOG" class="nav-link-mobile block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-white/5 hover:text-light-primary dark:hover:text-primary">ACCESS_LOG</a>
+                <a href="#ENCRYPT" class="nav-link-mobile block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-white/5">ENCRYPT TOOL</a>
             </div>
         </div>
     </nav>
@@ -232,35 +347,38 @@
     <!-- 4. STATUS SECTION (HERO) -->
     <section id="STATUS" class="pt-32 pb-20 px-4 relative overflow-hidden min-h-screen flex items-center">
         <!-- Background Glow -->
-        <div class="absolute top-0 right-0 w-1/2 h-1/2 bg-primary/10 blur-[100px] rounded-full -z-10"></div>
-        <div class="absolute bottom-0 left-0 w-1/2 h-1/2 bg-secondary/5 blur-[100px] rounded-full -z-10"></div>
+        <!-- MODIFIED: Use light/dark primary/secondary -->
+        <div class="absolute top-0 right-0 w-1/2 h-1/2 bg-light-primary/10 dark:bg-primary/10 blur-[100px] rounded-full -z-10"></div>
+        <div class="absolute bottom-0 left-0 w-1/2 h-1/2 bg-light-secondary/5 dark:bg-secondary/5 blur-[100px] rounded-full -z-10"></div>
 
         <!-- MODIFIED: Changed grid layout for mobile -->
         <div class="max-w-7xl mx-auto grid grid-cols-3 md:grid-cols-2 gap-8 md:gap-12 items-center w-full">
             <!-- Left Content -->
             <!-- MODIFIED: Added col-span-2 for mobile -->
             <div class="col-span-2 md:col-span-1 space-y-6 z-10">
-                <div class="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-mono tracking-wider">
-                    <span class="w-2 h-2 rounded-full bg-primary mr-2 animate-pulse"></span>
+                <!-- MODIFIED: Light/dark colors -->
+                <div class="inline-flex items-center px-3 py-1 rounded-full bg-light-primary/10 dark:bg-primary/10 border border-light-primary/20 dark:border-primary/20 text-light-primary dark:text-primary text-xs font-mono tracking-wider">
+                    <span class="w-2 h-2 rounded-full bg-light-primary dark:bg-primary mr-2 animate-pulse"></span>
                     STATUS: ONLINE
                 </div>
                 <!-- MODIFIED: Adjusted text size for mobile -->
-                <h1 class="text-4xl sm:text-5xl md:text-7xl font-bold leading-tight text-white">
+                <h1 class="text-4xl sm:text-5xl md:text-7xl font-bold leading-tight text-light-textMain dark:text-white">
                     Asanul Hoque <br />
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Esan</span>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-light-primary to-light-secondary dark:from-primary dark:to-secondary">Esan</span>
                 </h1>
                 <!-- MODIFIED: Adjusted text size for mobile -->
-                <div class="h-8 text-lg sm:text-xl md:text-2xl font-mono text-textMuted">
+                <div class="h-8 text-lg sm:text-xl md:text-2xl font-mono text-light-textMuted dark:text-textMuted">
                     &gt; <span id="typing-text" class="typing-cursor"></span>
                 </div>
-                <p class="text-base md:text-lg text-textMuted max-w-lg leading-relaxed">
+                <p class="text-base md:text-lg text-light-textMuted dark:text-textMuted max-w-lg leading-relaxed">
                     Securing digital infrastructures through advanced penetration testing, ethical hacking, and strategic vulnerability assessment.
                 </p>
                 <div class="flex flex-wrap gap-4 pt-4">
-                    <a href="#ENCRYPT" class="btn-gradient px-6 py-3 md:px-8 text-sm md:text-base text-white rounded-lg font-bold transition-all text-center">
+                    <a href="#ENCRYPT" class="btn-gradient px-6 py-3 md:px-8 text-sm md:text-base rounded-lg font-bold transition-all text-center">
                         Initiate Contact
                     </a>
-                    <a href="#DOCUMENTS" class="px-6 py-3 md:px-8 text-sm md:text-base border border-white/20 text-white rounded-lg font-bold hover:bg-white/5 transition-all text-center">
+                    <!-- MODIFIED: Light/dark button -->
+                    <a href="#DOCUMENTS" class="px-6 py-3 md:px-8 text-sm md:text-base border border-light-textMain/20 dark:border-white/20 text-light-textMain dark:text-white rounded-lg font-bold hover:bg-black/5 dark:hover:bg-white/5 transition-all text-center">
                         View Reports
                     </a>
                 </div>
@@ -269,19 +387,23 @@
             <!-- Right Content (Image) -->
             <!-- MODIFIED: Added col-span-1 for mobile -->
             <div class="col-span-1 md:col-span-1 relative z-10 flex justify-center">
-                <!-- MODIFIED: Removed w-80 md:w-96, added w-full -->
-                <div class="relative w-full aspect-[3/4] rounded-2xl overflow-hidden border border-white/10 group shadow-2xl">
-                    <div class="absolute inset-0 bg-gradient-to-b from-transparent to-bg/90 z-10"></div>
-                    <!-- PLACEHOLDER IMAGE - Replace src with your actual image -->
-                    <img src="/assets/images/WhatsApp%20Image%202025-11-15%20at%2019.00.02_8775b5a2.jpg" 
+                <!-- MODIFIED: Light/dark border and overlay -->
+                <div class="relative w-full aspect-[3/4] rounded-2xl overflow-hidden border border-gray-200 dark:border-white/10 group shadow-2xl">
+                    <div class="absolute inset-0 bg-gradient-to-b from-transparent to-light-bg/90 dark:to-bg/90 z-10"></div>
+                    <!-- 
+                        #####################################################
+                        MODIFIED: Image src changed to user-uploaded photo.jpg
+                        #####################################################
+                    -->
+                    <img src="photo.jpg" 
                          alt="Asanul Hoque Esan" 
-                         onerror="/assets/images/WhatsApp%20Image%202025-11-15%20at%2019.00.02_8775b5a2.jpg"
+                         onerror="this.src='https://placehold.co/400x600/111827/E8EEF3?text=A.H.E.'"
                          class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
                     
                     <div class="absolute bottom-0 left-0 w-full p-2 md:p-6 z-30">
-                        <div class="flex items-center justify-between border-t border-white/20 pt-2 md:pt-4">
-                            <span class="text-[10px] md:text-xs font-mono text-primary">ID: NULLLYNX</span>
-                            <i data-lucide="shield-check" class="text-secondary w-3 h-3 md:w-4 md:h-4"></i>
+                        <div class="flex items-center justify-between border-t border-gray-400 dark:border-white/20 pt-2 md:pt-4">
+                            <span class="text-[10px] md:text-xs font-mono text-light-primary dark:text-primary">ID: NULLLYNX</span>
+                            <i data-lucide="shield-check" class="text-light-secondary dark:text-secondary w-3 h-3 md:w-4 md:h-4"></i>
                         </div>
                     </div>
                 </div>
@@ -290,12 +412,13 @@
     </section>
 
     <!-- 5. PROFILE SECTION -->
-    <section id="PROFILE" class="py-24 bg-card/50 border-y border-white/5">
+    <!-- MODIFIED: Light/dark classes -->
+    <section id="PROFILE" class="py-24 bg-light-card/50 dark:bg-card/50 border-y border-gray-200 dark:border-white/5">
         <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-12 gap-12 items-center">
             <!-- Left: Bio -->
             <div class="md:col-span-7">
-                <h2 class="text-3xl md:text-4xl font-bold mb-6 text-white"><span class="text-primary">//</span> PROFILE</h2>
-                <div class="space-y-4 text-textMuted text-lg leading-relaxed">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6 text-light-textMain dark:text-white"><span class="text-light-primary dark:text-primary">//</span> PROFILE</h2>
+                <div class="space-y-4 text-light-textMuted dark:text-textMuted text-lg leading-relaxed">
                     <p>
                         Highly-motivated Cybersecurity Analyst with 3+ years of experience in offensive security, vulnerability assessment, and web application penetration testing.
                     </p>
@@ -306,30 +429,28 @@
                         I am passionate about building secure systems and thrive in fast-paced environments, constantly adapting to the evolving threat landscape.
                     </p>
                 </div>
-                 <!-- MODIFIED: Added button group and new "Read Full Bio" button -->
                  <div class="flex flex-wrap gap-4 mt-8">
-                    <a href="#DOCUMENTS" class="inline-flex items-center gap-2 px-6 py-3 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 transition-all font-bold">
+                    <a href="#DOCUMENTS" class="inline-flex items-center gap-2 px-6 py-3 bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-lg hover:bg-black/10 dark:hover:bg-white/10 transition-all font-bold">
                         <i data-lucide="download" class="w-4 h-4"></i> Download Resume
                     </a>
                     <button data-modal-target="about-me-full" class="inline-flex items-center gap-2 px-6 py-3 btn-gradient text-white rounded-lg font-bold transition-all">
                         <i data-lucide="user" class="w-4 h-4"></i> Read Full Bio
                     </button>
                  </div>
-                 <!-- END MODIFICATION -->
             </div>
             <!-- Right: Stats -->
             <div class="md:col-span-5 flex flex-col gap-6">
-                <div class="text-center p-6 bg-bg border border-white/5 rounded-xl shadow-lg">
-                    <h3 class="text-5xl font-bold text-white" id="count-vuln">0+</h3>
-                    <p class="text-sm text-primary font-mono mt-2">CRITICAL VULNERABILITIES FOUND</p>
+                <div class="text-center p-6 bg-light-bg dark:bg-bg border border-gray-200 dark:border-white/5 rounded-xl shadow-lg">
+                    <h3 class="text-5xl font-bold text-light-textMain dark:text-white" id="count-vuln">0+</h3>
+                    <p class="text-sm text-light-primary dark:text-primary font-mono mt-2">CRITICAL VULNERABILITIES FOUND</p>
                 </div>
-                <div class="text-center p-6 bg-bg border border-white/5 rounded-xl shadow-lg">
-                    <h3 class="text-5xl font-bold text-white" id="count-client">0+</h3>
-                    <p class="text-sm text-primary font-mono mt-2">CLIENTS & PROJECTS</p>
+                <div class="text-center p-6 bg-light-bg dark:bg-bg border border-gray-200 dark:border-white/5 rounded-xl shadow-lg">
+                    <h3 class="text-5xl font-bold text-light-textMain dark:text-white" id="count-client">0+</h3>
+                    <p class="text-sm text-light-primary dark:text-primary font-mono mt-2">CLIENTS & PROJECTS</p>
                 </div>
-                <div class="text-center p-6 bg-bg border border-white/5 rounded-xl shadow-lg">
-                    <h3 class="text-5xl font-bold text-white" id="count-rate">0%</h3>
-                    <p class="text-sm text-primary font-mono mt-2">SUCCESS RATE</p>
+                <div class="text-center p-6 bg-light-bg dark:bg-bg border border-gray-200 dark:border-white/5 rounded-xl shadow-lg">
+                    <h3 class="text-5xl font-bold text-light-textMain dark:text-white" id="count-rate">0%</h3>
+                    <p class="text-sm text-light-primary dark:text-primary font-mono mt-2">SUCCESS RATE</p>
                 </div>
             </div>
         </div>
@@ -338,14 +459,14 @@
     <!-- 6. ANALYSIS & EXPERTISE (MARQUEE) -->
     <section id="ANALYSIS" class="py-24 overflow-hidden">
         <div class="text-center mb-16">
-            <h2 class="text-3xl md:text-4xl font-bold text-white"><span class="text-secondary">//</span> ANALYSIS & EXPERTISE</h2>
-            <p class="text-textMuted uppercase tracking-widest text-sm mt-2">TOOLS / VULNERABILITIES / AREAS</p>
+            <h2 class="text-3xl md:text-4xl font-bold text-light-textMain dark:text-white"><span class="text-light-secondary dark:text-secondary">//</span> ANALYSIS & EXPERTISE</h2>
+            <p class="text-light-textMuted dark:text-textMuted uppercase tracking-widest text-sm mt-2">TOOLS / VULNERABILITIES / AREAS</p>
         </div>
 
         <!-- Row 1: Tools (Right to Left) -->
         <div class="mb-12">
-            <p class="max-w-7xl mx-auto px-4 mb-2 text-sm font-mono text-secondary">TOOLS_I_KNOW</p>
-            <div class="marquee-container relative w-full overflow-hidden py-4 bg-white/5 border-y border-white/5">
+            <p class="max-w-7xl mx-auto px-4 mb-2 text-sm font-mono text-light-secondary dark:text-secondary">TOOLS_I_KNOW</p>
+            <div class="marquee-container relative w-full overflow-hidden py-4 bg-black/5 dark:bg-white/5 border-y border-gray-200 dark:border-white/5">
                 <div class="marquee-content flex gap-4 w-max animate-scroll-left pl-4" id="tools-marquee">
                     <!-- JS will inject items here -->
                 </div>
@@ -354,8 +475,8 @@
 
         <!-- Row 2: Vulns (Left to Right) -->
         <div class="mb-12">
-            <p class="max-w-7xl mx-auto px-4 mb-2 text-sm font-mono text-primary text-right">KNOWN_VULNERABILITIES</p>
-            <div class="marquee-container relative w-full overflow-hidden py-4 bg-white/5 border-y border-white/5">
+            <p class="max-w-7xl mx-auto px-4 mb-2 text-sm font-mono text-light-primary dark:text-primary text-right">KNOWN_VULNERABILITIES</p>
+            <div class="marquee-container relative w-full overflow-hidden py-4 bg-black/5 dark:bg-white/5 border-y border-gray-200 dark:border-white/5">
                 <div class="marquee-content flex gap-4 w-max animate-scroll-right pl-4" id="vuln-marquee">
                     <!-- JS will inject items here -->
                 </div>
@@ -364,7 +485,7 @@
 
         <!-- Row 3: Expertise (Grid Layout) -->
         <div>
-            <p class="max-w-7xl mx-auto px-4 mb-4 text-sm font-mono text-secondary">KEY EXPERTISE AREAS</p>
+            <p class="max-w-7xl mx-auto px-4 mb-4 text-sm font-mono text-light-secondary dark:text-secondary">KEY EXPERTISE AREAS</p>
             <div id="expertise-grid" class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- JS will inject expertise cards here -->
             </div>
@@ -372,42 +493,42 @@
     </section>
 
     <!-- 7. PLATFORM ACCOMPLISHMENTS -->
-    <section id="ACCOMPLISH" class="py-24 bg-card/30 border-y border-white/5">
+    <!-- MODIFIED: Light/dark classes -->
+    <section id="ACCOMPLISH" class="py-24 bg-light-card/30 dark:bg-card/30 border-y border-gray-200 dark:border-white/5">
         <div class="max-w-7xl mx-auto px-4">
-            <h2 class="text-3xl md:text-4xl font-bold mb-16 text-center text-white"><span class="text-primary">//</span> PLATFORM ACCOMPLISHMENTS</h2>
+            <h2 class="text-3xl md:text-4xl font-bold mb-16 text-center text-light-textMain dark:text-white"><span class="text-light-primary dark:text-primary">//</span> PLATFORM ACCOMPLISHMENTS</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-5 gap-6 items-center" id="platforms-grid">
-                <!-- Platform cards will be dynamically checked or modified by JS for clicks -->
                 <!-- Card 1 -->
-                <a data-modal-target="platform-hackerone" class="p-6 bg-bg border border-white/10 rounded-xl text-center hover:border-primary/50 hover:-translate-y-2 transition-all duration-300 shadow-lg h-full cursor-pointer">
-                    <i data-lucide="shield" class="w-10 h-10 text-primary mx-auto mb-4"></i>
-                    <h3 class="font-bold text-white text-lg">HackerOne</h3>
-                    <p class="text-secondary text-sm font-mono mt-1">Top 1%</p>
+                <a data-modal-target="platform-hackerone" class="p-6 bg-light-card dark:bg-bg border border-gray-200 dark:border-white/10 rounded-xl text-center hover:border-light-primary/50 dark:hover:border-primary/50 hover:-translate-y-2 transition-all duration-300 shadow-lg h-full cursor-pointer">
+                    <i data-lucide="shield" class="w-10 h-10 text-light-primary dark:text-primary mx-auto mb-4"></i>
+                    <h3 class="font-bold text-light-textMain dark:text-white text-lg">HackerOne</h3>
+                    <p class="text-light-secondary dark:text-secondary text-sm font-mono mt-1">Top 1%</p>
                 </a>
                 <!-- Card 2 -->
-                 <a data-modal-target="platform-bugcrowd" class="p-6 bg-bg border border-white/10 rounded-xl text-center hover:border-primary/50 hover:-translate-y-2 transition-all duration-300 shadow-lg h-full cursor-pointer">
-                    <i data-lucide="bug" class="w-10 h-10 text-primary mx-auto mb-4"></i>
-                    <h3 class="font-bold text-white text-lg">Bugcrowd</h3>
-                    <p class="text-secondary text-sm font-mono mt-1">Top 50</p>
+                 <a data-modal-target="platform-bugcrowd" class="p-6 bg-light-card dark:bg-bg border border-gray-200 dark:border-white/10 rounded-xl text-center hover:border-light-primary/50 dark:hover:border-primary/50 hover:-translate-y-2 transition-all duration-300 shadow-lg h-full cursor-pointer">
+                    <i data-lucide="bug" class="w-10 h-10 text-light-primary dark:text-primary mx-auto mb-4"></i>
+                    <h3 class="font-bold text-light-textMain dark:text-white text-lg">Bugcrowd</h3>
+                    <p class="text-light-secondary dark:text-secondary text-sm font-mono mt-1">Top 50</p>
                 </a>
                 <!-- Card 3 (Center Big) -->
-                 <a data-modal-target="platform-htb" class="p-8 bg-bg border border-primary/50 shadow-[0_0_40px_rgba(0,194,255,0.2)] rounded-xl text-center transform md:scale-110 z-10 hover:-translate-y-2 transition-all duration-300 h-full cursor-pointer">
-                    <i data-lucide="cpu" class="w-12 h-12 text-primary mx-auto mb-4"></i>
-                    <h3 class="font-bold text-white text-xl">HackTheBox</h3>
-                    <p class="text-secondary font-mono text-lg mt-1">PRO HACKER</p>
-                    <p class="text-xs text-textMuted mt-2">Rank: Guru</p>
+                 <a data-modal-target="platform-htb" class="p-8 bg-light-card dark:bg-bg border border-light-primary/50 dark:border-primary/50 shadow-[0_0_40px_rgba(0,194,255,0.2)] rounded-xl text-center transform md:scale-110 z-10 hover:-translate-y-2 transition-all duration-300 h-full cursor-pointer">
+                    <i data-lucide="cpu" class="w-12 h-12 text-light-primary dark:text-primary mx-auto mb-4"></i>
+                    <h3 class="font-bold text-light-textMain dark:text-white text-xl">HackTheBox</h3>
+                    <p class="text-light-secondary dark:text-secondary font-mono text-lg mt-1">PRO HACKER</p>
+                    <p class="text-xs text-light-textMuted dark:text-textMuted mt-2">Rank: Guru</p>
                 </a>
                 <!-- Card 4 -->
-                 <a data-modal-target="platform-thm" class="p-6 bg-bg border border-white/10 rounded-xl text-center hover:border-primary/50 hover:-translate-y-2 transition-all duration-300 shadow-lg h-full cursor-pointer">
-                    <i data-lucide="terminal-square" class="w-10 h-10 text-primary mx-auto mb-4"></i>
-                    <h3 class="font-bold text-white text-lg">TryHackMe</h3>
-                    <p class="text-secondary text-sm font-mono mt-1">Top 1%</p>
+                 <a data-modal-target="platform-thm" class="p-6 bg-light-card dark:bg-bg border border-gray-200 dark:border-white/10 rounded-xl text-center hover:border-light-primary/50 dark:hover:border-primary/50 hover:-translate-y-2 transition-all duration-300 shadow-lg h-full cursor-pointer">
+                    <i data-lucide="terminal-square" class="w-10 h-10 text-light-primary dark:text-primary mx-auto mb-4"></i>
+                    <h3 class="font-bold text-light-textMain dark:text-white text-lg">TryHackMe</h3>
+                    <p class="text-light-secondary dark:text-secondary text-sm font-mono mt-1">Top 1%</p>
                 </a>
                 <!-- Card 5 -->
-                 <a data-modal-target="platform-portswigger" class="p-6 bg-bg border border-white/10 rounded-xl text-center hover:border-primary/50 hover:-translate-y-2 transition-all duration-300 shadow-lg h-full cursor-pointer">
-                    <i data-lucide="database" class="w-10 h-10 text-primary mx-auto mb-4"></i>
-                    <h3 class="font-bold text-white text-lg">PortSwigger</h3>
-                    <p class="text-secondary text-sm font-mono mt-1">Certified</p>
+                 <a data-modal-target="platform-portswigger" class="p-6 bg-light-card dark:bg-bg border border-gray-200 dark:border-white/10 rounded-xl text-center hover:border-light-primary/50 dark:hover:border-primary/50 hover:-translate-y-2 transition-all duration-300 shadow-lg h-full cursor-pointer">
+                    <i data-lucide="database" class="w-10 h-10 text-light-primary dark:text-primary mx-auto mb-4"></i>
+                    <h3 class="font-bold text-light-textMain dark:text-white text-lg">PortSwigger</h3>
+                    <p class="text-light-secondary dark:text-secondary text-sm font-mono mt-1">Certified</p>
                 </a>
             </div>
 
@@ -417,7 +538,7 @@
             </div>
 
             <div class="text-center mt-12">
-                 <button id="platform-toggle-btn" data-state="more" class="text-sm font-mono text-textMuted hover:text-white underline decoration-primary/50 underline-offset-4">
+                 <button id="platform-toggle-btn" data-state="more" class="text-sm font-mono text-light-textMuted dark:text-textMuted hover:text-light-textMain dark:hover:text-white underline decoration-light-primary/50 dark:decoration-primary/50 underline-offset-4">
                     See More (45+)
                  </button>
             </div>
@@ -427,39 +548,39 @@
     <!-- 8. DOCUMENTS & REPORTS -->
     <section id="DOCUMENTS" class="py-24">
         <div class="max-w-7xl mx-auto px-4">
-            <h2 class="text-3xl md:text-4xl font-bold mb-16 text-center text-white"><span class="text-secondary">//</span> DOCUMENTS & REPORTS</h2>
+            <h2 class="text-3xl md:text-4xl font-bold mb-16 text-center text-light-textMain dark:text-white"><span class="text-light-secondary dark:text-secondary">//</span> DOCUMENTS & REPORTS</h2>
             
             <!-- Certifications -->
-            <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
-              <i data-lucide="award" class="text-secondary"></i> TOP CERTIFICATIONS
+            <h3 class="text-xl font-bold text-light-textMain dark:text-white mb-6 flex items-center gap-2">
+              <i data-lucide="award" class="text-light-secondary dark:text-secondary"></i> TOP CERTIFICATIONS
             </h3>
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-12 group/grid">
                 <!-- Cert 1 -->
-                <div data-modal-target="cert-oscp" class="p-6 rounded-lg border border-white/10 bg-card transition-all duration-300 group-hover/grid:blur-[1px] hover:!blur-none hover:!scale-105 hover:border-secondary/50 cursor-pointer shadow-lg">
-                    <i data-lucide="award" class="text-secondary mb-3 w-8 h-8"></i>
-                    <h3 class="font-bold text-white text-sm">OSCP</h3>
-                    <p class="text-xs text-textMuted mt-1">Offensive Security</p>
+                <div data-modal-target="cert-oscp" class="p-6 rounded-lg border border-gray-200 dark:border-white/10 bg-light-card dark:bg-card transition-all duration-300 group-hover/grid:blur-[1px] hover:!blur-none hover:!scale-105 hover:border-light-secondary/50 dark:hover:border-secondary/50 cursor-pointer shadow-lg">
+                    <i data-lucide="award" class="text-light-secondary dark:text-secondary mb-3 w-8 h-8"></i>
+                    <h3 class="font-bold text-light-textMain dark:text-white text-sm">OSCP</h3>
+                    <p class="text-xs text-light-textMuted dark:text-textMuted mt-1">Offensive Security</p>
                 </div>
                 <!-- Cert 2 -->
-                <div data-modal-target="cert-ceh" class="p-6 rounded-lg border border-white/10 bg-card transition-all duration-300 group-hover/grid:blur-[1px] hover:!blur-none hover:!scale-105 hover:border-secondary/50 cursor-pointer shadow-lg">
-                    <i data-lucide="award" class="text-secondary mb-3 w-8 h-8"></i>
-                    <h3 class="font-bold text-white text-sm">CEH (Practical)</h3>
-                    <p class="text-xs text-textMuted mt-1">EC-Council</p>
+                <div data-modal-target="cert-ceh" class="p-6 rounded-lg border border-gray-200 dark:border-white/10 bg-light-card dark:bg-card transition-all duration-300 group-hover/grid:blur-[1px] hover:!blur-none hover:!scale-105 hover:border-light-secondary/50 dark:hover:border-secondary/50 cursor-pointer shadow-lg">
+                    <i data-lucide="award" class="text-light-secondary dark:text-secondary mb-3 w-8 h-8"></i>
+                    <h3 class="font-bold text-light-textMain dark:text-white text-sm">CEH (Practical)</h3>
+                    <p class="text-xs text-light-textMuted dark:text-textMuted mt-1">EC-Council</p>
                 </div>
                 <!-- Cert 3 -->
-                <div data-modal-target="cert-ejpt" class="p-6 rounded-lg border border-white/10 bg-card transition-all duration-300 group-hover/grid:blur-[1px] hover:!blur-none hover:!scale-105 hover:border-secondary/50 cursor-pointer shadow-lg">
-                    <i data-lucide="award" class="text-secondary mb-3 w-8 h-8"></i>
-                    <h3 class="font-bold text-white text-sm">eJPT</h3>
-                    <p class="text-xs text-textMuted mt-1">eLearnSecurity</p>
+                <div data-modal-target="cert-ejpt" class="p-6 rounded-lg border border-gray-200 dark:border-white/10 bg-light-card dark:bg-card transition-all duration-300 group-hover/grid:blur-[1px] hover:!blur-none hover:!scale-105 hover:border-light-secondary/50 dark:hover:border-secondary/50 cursor-pointer shadow-lg">
+                    <i data-lucide="award" class="text-light-secondary dark:text-secondary mb-3 w-8 h-8"></i>
+                    <h3 class="font-bold text-light-textMain dark:text-white text-sm">eJPT</h3>
+                    <p class="text-xs text-light-textMuted dark:text-textMuted mt-1">eLearnSecurity</p>
                 </div>
                 <!-- Cert 4 -->
-                <div data-modal-target="cert-secplus" class="p-6 rounded-lg border border-white/10 bg-card transition-all duration-300 group-hover/grid:blur-[1px] hover:!blur-none hover:!scale-105 hover:border-secondary/50 cursor-pointer shadow-lg">
-                    <i data-lucide="award" class="text-secondary mb-3 w-8 h-8"></i>
-                    <h3 class="font-bold text-white text-sm">Security+</h3>
-                    <p class="text-xs text-textMuted mt-1">CompTIA</p>
+                <div data-modal-target="cert-secplus" class="p-6 rounded-lg border border-gray-200 dark:border-white/10 bg-light-card dark:bg-card transition-all duration-300 group-hover/grid:blur-[1px] hover:!blur-none hover:!scale-105 hover:border-light-secondary/50 dark:hover:border-secondary/50 cursor-pointer shadow-lg">
+                    <i data-lucide="award" class="text-light-secondary dark:text-secondary mb-3 w-8 h-8"></i>
+                    <h3 class="font-bold text-light-textMain dark:text-white text-sm">Security+</h3>
+                    <p class="text-xs text-light-textMuted dark:text-textMuted mt-1">CompTIA</p>
                 </div>
                 <!-- Cert 5 (See More) -->
-                <div id="see-all-certs-btn" class="p-6 rounded-lg border border-dashed border-white/20 bg-card/50 text-textMuted transition-all duration-300 hover:border-secondary hover:text-secondary cursor-pointer flex flex-col items-center justify-center text-center">
+                <div id="see-all-certs-btn" class="p-6 rounded-lg border border-dashed border-gray-300 dark:border-white/20 bg-light-card/50 dark:bg-card/50 text-light-textMuted dark:text-textMuted transition-all duration-300 hover:border-light-secondary dark:hover:border-secondary hover:text-light-secondary dark:hover:text-secondary cursor-pointer flex flex-col items-center justify-center text-center">
                     <i data-lucide="plus-circle" class="w-8 h-8 mb-2"></i>
                     <h3 class="font-bold text-sm">See More</h3>
                     <p class="text-xs mt-1">(40+)</p>
@@ -467,10 +588,10 @@
             </div>
 
             <!-- Reports -->
-            <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2 border-t border-white/10 pt-12">
-              <i data-lucide="file-text" class="text-primary"></i> VULNERABILITY REPORTS
+            <h3 class="text-xl font-bold text-light-textMain dark:text-white mb-6 flex items-center gap-2 border-t border-gray-200 dark:border-white/10 pt-12">
+              <i data-lucide="file-text" class="text-light-primary dark:text-primary"></i> VULNERABILITY REPORTS
             </h3>
-            <div class="marquee-container relative w-full overflow-hidden py-4 bg-white/5 border-y border-white/5">
+            <div class="marquee-container relative w-full overflow-hidden py-4 bg-black/5 dark:bg-white/5 border-y border-gray-200 dark:border-white/5">
                 <div class="marquee-content flex gap-4 w-max animate-scroll-left pl-4" id="reports-marquee">
                     <!-- JS will inject items here -->
                 </div>
@@ -479,13 +600,14 @@
     </section>
 
     <!-- 9. ACCESS LOG (TABLE) -->
-    <section id="ACCESS_LOG" class="py-24 bg-card/30 border-y border-white/5">
+    <!-- MODIFIED: Light/dark classes -->
+    <section id="ACCESS_LOG" class="py-24 bg-light-card/30 dark:bg-card/30 border-y border-gray-200 dark:border-white/5">
         <div class="max-w-5xl mx-auto px-4">
-            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center text-white"><span class="text-primary">//</span> ACCESS LOG</h2>
+            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center text-light-textMain dark:text-white"><span class="text-light-primary dark:text-primary">//</span> ACCESS LOG</h2>
             
-            <div class="overflow-hidden rounded-xl border border-white/10 bg-bg shadow-2xl">
-                <table class="w-full text-left text-sm text-textMuted">
-                    <thead class="bg-card text-xs uppercase font-mono text-primary">
+            <div class="overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-light-card dark:bg-bg shadow-2xl">
+                <table class="w-full text-left text-sm text-light-textMuted dark:text-textMuted">
+                    <thead class="bg-gray-100 dark:bg-card text-xs uppercase font-mono text-light-primary dark:text-primary">
                         <tr>
                             <th class="px-6 py-4">Timestamp</th>
                             <th class="px-6 py-4">Action</th>
@@ -493,36 +615,36 @@
                             <th class="px-6 py-4 text-right">Status</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-white/5 font-mono">
-                        <tr class="hover:bg-white/5 transition-colors">
+                    <tbody class="divide-y divide-gray-200 dark:divide-white/5 font-mono">
+                        <tr class="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
                             <td class="px-6 py-4">2025-11-17 10:30</td>
-                            <td class="px-6 py-4 text-white">Vulnerability Found</td>
+                            <td class="px-6 py-4 text-light-textMain dark:text-white">Vulnerability Found</td>
                             <td class="px-6 py-4 hidden sm:table-cell">Client A [Banking]</td>
-                            <td class="px-6 py-4 text-right"><span class="px-2 py-1 bg-red-500/20 text-red-400 rounded text-xs">CRITICAL</span></td>
+                            <td class="px-6 py-4 text-right"><span class="px-2 py-1 bg-red-500/10 dark:bg-red-500/20 text-red-600 dark:text-red-400 rounded text-xs">CRITICAL</span></td>
                         </tr>
-                        <tr class="hover:bg-white/5 transition-colors">
+                        <tr class="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
                             <td class="px-6 py-4">2025-11-16 14:20</td>
-                            <td class="px-6 py-4 text-white">CTF Completed</td>
+                            <td class="px-6 py-4 text-light-textMain dark:text-white">CTF Completed</td>
                             <td class="px-6 py-4 hidden sm:table-cell">HackTheBox (Insane)</td>
-                            <td class="px-6 py-4 text-right"><span class="px-2 py-1 bg-green-500/20 text-green-400 rounded text-xs">SOLVED</span></td>
+                            <td class="px-6 py-4 text-right"><span class="px-2 py-1 bg-green-500/10 dark:bg-green-500/20 text-green-600 dark:text-green-400 rounded text-xs">SOLVED</span></td>
                         </tr>
-                        <tr class="hover:bg-white/5 transition-colors">
+                        <tr class="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
                             <td class="px-6 py-4">2025-11-15 09:00</td>
-                            <td class="px-6 py-4 text-white">System Audit</td>
+                            <td class="px-6 py-4 text-light-textMain dark:text-white">System Audit</td>
                             <td class="px-6 py-4 hidden sm:table-cell">Internal Network</td>
-                            <td class="px-6 py-4 text-right"><span class="px-2 py-1 bg-primary/20 text-primary rounded text-xs">SECURE</span></td>
+                            <td class="px-6 py-4 text-right"><span class="px-2 py-1 bg-blue-500/10 dark:bg-primary/20 text-blue-600 dark:text-primary rounded text-xs">SECURE</span></td>
                         </tr>
-                        <tr class="hover:bg-white/5 transition-colors">
+                        <tr class="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
                             <td class="px-6 py-4">2025-11-14 18:45</td>
-                            <td class="px-6 py-4 text-white">Report Submitted</td>
+                            <td class="px-6 py-4 text-light-textMain dark:text-white">Report Submitted</td>
                             <td class="px-6 py-4 hidden sm:table-cell">HackerOne</td>
-                            <td class="px-6 py-4 text-right"><span class="px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded text-xs">TRIAGED</span></td>
+                            <td class="px-6 py-4 text-right"><span class="px-2 py-1 bg-yellow-500/10 dark:bg-yellow-500/20 text-yellow-600 dark:text-yellow-400 rounded text-xs">TRIAGED</span></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div class="text-center mt-8">
-                 <button id="see-all-logs-btn" class="text-sm font-mono text-textMuted hover:text-white underline decoration-primary/50 underline-offset-4">
+                 <button id="see-all-logs-btn" class="text-sm font-mono text-light-textMuted dark:text-textMuted hover:text-light-textMain dark:hover:text-white underline decoration-light-primary/50 dark:decoration-primary/50 underline-offset-4">
                     See All Activity (100+)
                  </button>
             </div>
@@ -533,52 +655,53 @@
     <section id="ENCRYPT" class="py-24">
         <div class="max-w-6xl mx-auto px-4">
             <div class="mb-12 text-center">
-                <h2 class="text-3xl md:text-4xl font-bold text-white"><span class="text-primary">//</span> ENCRYPT / DECRYPT</h2>
-                <p class="text-textMuted uppercase tracking-widest text-sm mt-2">SECURE TOOLS SUITE</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-light-textMain dark:text-white"><span class="text-light-primary dark:text-primary">//</span> ENCRYPT / DECRYPT</h2>
+                <p class="text-light-textMuted dark:text-textMuted uppercase tracking-widest text-sm mt-2">SECURE TOOLS SUITE</p>
             </div>
 
-            <div class="grid md:grid-cols-12 gap-8 bg-card rounded-2xl border border-white/10 overflow-hidden shadow-2xl">
+            <!-- MODIFIED: Light/dark classes -->
+            <div class="grid md:grid-cols-12 gap-8 bg-light-card dark:bg-card rounded-2xl border border-gray-200 dark:border-white/10 overflow-hidden shadow-2xl">
                 <!-- Sidebar -->
-                <div class="md:col-span-3 bg-bg border-r border-white/10 p-4 max-h-[500px] overflow-y-auto" id="algo-list">
-                    <h3 class="text-textMuted text-xs font-mono uppercase mb-4 pl-2">Algorithms (20)</h3>
+                <div class="md:col-span-3 bg-light-bg dark:bg-bg border-r border-gray-200 dark:border-white/10 p-4 max-h-[500px] overflow-y-auto" id="algo-list">
+                    <h3 class="text-light-textMuted dark:text-textMuted text-xs font-mono uppercase mb-4 pl-2">Algorithms (20)</h3>
                     <!-- JS will inject algo buttons here -->
                 </div>
 
                 <!-- Tool -->
                 <div class="md:col-span-9 p-8">
                     <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-6 gap-4">
-                        <h3 class="text-2xl font-bold text-white flex items-center gap-3">
-                            <i data-lucide="lock" class="text-secondary w-6 h-6"></i> <span id="current-algo-name">Base64</span> Processor
+                        <h3 class="text-2xl font-bold text-light-textMain dark:text-white flex items-center gap-3">
+                            <i data-lucide="lock" class="text-light-secondary dark:text-secondary w-6 h-6"></i> <span id="current-algo-name">Base64</span> Processor
                         </h3>
-                        <div class="flex gap-2 text-xs font-mono text-textMuted">
-                            <span class="px-2 py-1 border border-white/10 rounded">KEY: AES-256</span>
-                            <span class="px-2 py-1 border border-white/10 rounded">MODE: GCM</span>
+                        <div class="flex gap-2 text-xs font-mono text-light-textMuted dark:text-textMuted">
+                            <span class="px-2 py-1 border border-gray-300 dark:border-white/10 rounded">KEY: AES-256</span>
+                            <span class="px-2 py-1 border border-gray-300 dark:border-white/10 rounded">MODE: GCM</span>
                         </div>
                     </div>
 
                     <div class="grid gap-6">
                         <div>
-                            <label for="crypto-input" class="text-sm text-textMuted uppercase tracking-wider">Input Payload</label>
-                            <textarea id="crypto-input" class="w-full h-32 bg-bg border border-white/10 rounded-lg p-4 text-white font-mono focus:border-primary outline-none mt-2 transition-colors" placeholder="Enter text to process..."></textarea>
+                            <label for="crypto-input" class="text-sm text-light-textMuted dark:text-textMuted uppercase tracking-wider">Input Payload</label>
+                            <textarea id="crypto-input" class="w-full h-32 bg-light-bg dark:bg-bg border border-gray-200 dark:border-white/10 rounded-lg p-4 text-light-textMain dark:text-white font-mono focus:border-light-primary dark:focus:border-primary outline-none mt-2 transition-colors" placeholder="Enter text to process..."></textarea>
                         </div>
 
                         <div class="flex justify-center gap-4">
                             <button onclick="processCrypto(false)" class="px-8 py-3 btn-gradient text-white font-bold rounded-lg transition-all flex items-center gap-2">
                                 <i data-lucide="lock" class="w-4 h-4"></i> ENCRYPT
                             </button>
-                            <button onclick="processCrypto(true)" class="px-8 py-3 bg-white/10 border border-white/20 text-white font-bold rounded-lg hover:bg-white/20 transition-all flex items-center gap-2">
+                            <button onclick="processCrypto(true)" class="px-8 py-3 bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/20 text-light-textMain dark:text-white font-bold rounded-lg hover:bg-black/10 dark:hover:bg-white/20 transition-all flex items-center gap-2">
                                 <i data-lucide="unlock" class="w-4 h-4"></i> DECRYPT
                             </button>
                         </div>
 
                         <div>
-                            <label for="crypto-output" class="text-sm text-textMuted uppercase tracking-wider flex justify-between">
+                            <label for="crypto-output" class="text-sm text-light-textMuted dark:text-textMuted uppercase tracking-wider flex justify-between">
                                 <span>Output Result</span>
-                                <span class="text-xs text-green-400 hidden" id="success-msg">STATUS: SUCCESS</span>
+                                <span class="text-xs text-green-600 dark:text-green-400 hidden" id="success-msg">STATUS: SUCCESS</span>
                             </label>
                             <div class="relative mt-2">
-                                <textarea id="crypto-output" readonly class="w-full h-32 bg-bg border border-white/10 rounded-lg p-4 text-secondary font-mono outline-none" placeholder="Output will appear here..."></textarea>
-                                <button onclick="copyOutput()" class="absolute top-4 right-4 p-2 bg-card border border-white/10 rounded hover:bg-white/20 text-white transition-colors" title="Copy Output">
+                                <textarea id="crypto-output" readonly class="w-full h-32 bg-light-bg dark:bg-bg border border-gray-200 dark:border-white/10 rounded-lg p-4 text-light-secondary dark:text-secondary font-mono outline-none" placeholder="Output will appear here..."></textarea>
+                                <button onclick="copyOutput()" class="absolute top-4 right-4 p-2 bg-light-card dark:bg-card border border-gray-200 dark:border-white/10 rounded hover:bg-gray-200 dark:hover:bg-white/20 text-light-textMain dark:text-white transition-colors" title="Copy Output">
                                     <i data-lucide="copy" class="w-4 h-4"></i>
                                 </button>
                             </div>
@@ -590,47 +713,53 @@
     </section>
 
     <!-- 11. FOOTER -->
-    <footer class="bg-[#05080f] border-t border-white/5 pt-16 pb-8">
+    <!-- MODIFIED: Light/dark classes -->
+    <footer class="bg-gray-100 dark:bg-[#05080f] border-t border-gray-200 dark:border-white/5 pt-16 pb-8">
         <div class="max-w-7xl mx-auto px-4">
             <div class="grid md:grid-cols-3 gap-12 mb-12">
                 <!-- Left: Brand & Socials -->
                 <div class="md:col-span-1">
                     <div class="flex items-center gap-2 mb-4">
-                        <i data-lucide="terminal" class="text-primary w-8 h-8"></i>
-                        <span class="font-bold text-3xl tracking-tighter text-white">null<span class="text-primary">lynx</span></span>
+                        <i data-lucide="terminal" class="text-light-primary dark:text-primary w-8 h-8"></i>
+                        <span class="font-bold text-3xl tracking-tighter text-light-textMain dark:text-white">null<span class="text-light-primary dark:text-primary">lynx</span></span>
                     </div>
-                    <p class="text-textMuted max-w-md mb-6">
+                    <p class="text-light-textMuted dark:text-textMuted max-w-md mb-6">
                         Professional cybersecurity services, vulnerability assessment, and ethical hacking solutions.
                     </p>
-                    <div class="flex gap-4">
-                        <a href="#" class="p-3 bg-card rounded-lg text-textMuted hover:bg-primary hover:text-white transition-all"><i data-lucide="github" class="w-5 h-5"></i></a>
-                        <a href="#" class="p-3 bg-card rounded-lg text-textMuted hover:bg-primary hover:text-white transition-all"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
-                        <a href="#" class="p-3 bg-card rounded-lg text-textMuted hover:bg-primary hover:text-white transition-all"><i data-lucide="twitter" class="w-5 h-5"></i></a>
-                        <a href="#" class="p-3 bg-card rounded-lg text-textMuted hover:bg-primary hover:text-white transition-all"><i data-lucide="instagram" class="w-5 h-5"></i></a>
-                        <a href="#" class="p-3 bg-card rounded-lg text-textMuted hover:bg-primary hover:text-white transition-all"><i data-lucide="youtube" class="w-5 h-5"></i></a>
+                    <div class="flex gap-4 flex-wrap">
+                        <a href="#" class="p-3 bg-gray-200 dark:bg-card rounded-lg text-light-textMuted dark:text-textMuted hover:bg-light-primary dark:hover:bg-primary hover:text-white transition-all"><i data-lucide="github" class="w-5 h-5"></i></a>
+                        <a href="#" class="p-3 bg-gray-200 dark:bg-card rounded-lg text-light-textMuted dark:text-textMuted hover:bg-light-primary dark:hover:bg-primary hover:text-white transition-all"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                        <a href="#" class="p-3 bg-gray-200 dark:bg-card rounded-lg text-light-textMuted dark:text-textMuted hover:bg-light-primary dark:hover:bg-primary hover:text-white transition-all"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                        <a href="#" class="p-3 bg-gray-200 dark:bg-card rounded-lg text-light-textMuted dark:text-textMuted hover:bg-light-primary dark:hover:bg-primary hover:text-white transition-all" title="HackerOne"><i data-lucide="shield" class="w-5 h-5"></i></a>
+                        <a href="#" class="p-3 bg-gray-200 dark:bg-card rounded-lg text-light-textMuted dark:text-textMuted hover:bg-light-primary dark:hover:bg-primary hover:text-white transition-all" title="Bugcrowd"><i data-lucide="bug" class="w-5 h-5"></i></a>
+                        <a href="#" class="p-3 bg-gray-200 dark:bg-card rounded-lg text-light-textMuted dark:text-textMuted hover:bg-light-primary dark:hover:bg-primary hover:text-white transition-all" title="HackTheBox"><i data-lucide="cpu" class="w-5 h-5"></i></a>
+                        <a href="#" class="p-3 bg-gray-200 dark:bg-card rounded-lg text-light-textMMuted dark:text-textMuted hover:bg-light-primary dark:hover:bg-primary hover:text-white transition-all" title="TryHackMe"><i data-lucide="terminal-square" class="w-5 h-5"></i></a>
+                        <a href="#" class="p-3 bg-gray-200 dark:bg-card rounded-lg text-light-textMuted dark:text-textMuted hover:bg-light-primary dark:hover:bg-primary hover:text-white transition-all" title="GitLab"><i data-lucide="gitlab" class="w-5 h-5"></i></a>
+                        <a href="#" class="p-3 bg-gray-200 dark:bg-card rounded-lg text-light-textMuted dark:text-textMuted hover:bg-light-primary dark:hover:bg-primary hover:text-white transition-all" title="Medium"><i data-lucide="book-open" class="w-5 h-5"></i></a>
+                        <a href="#" class="p-3 bg-gray-200 dark:bg-card rounded-lg text-light-textMuted dark:text-textMuted hover:bg-light-primary dark:hover:bg-primary hover:text-white transition-all" title="Facebook"><i data-lucide="facebook" class="w-5 h-5"></i></a>
                     </div>
                 </div>
                 
                 <!-- Right: Contact -->
                 <div class="md:col-span-2">
-                    <h4 class="text-white font-bold text-lg mb-4">CONTACT / ACCESS</h4>
+                    <h4 class="text-light-textMain dark:text-white font-bold text-lg mb-4">CONTACT / ACCESS</h4>
                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                        <ul class="space-y-3 text-textMuted font-mono text-sm">
-                            <li class="flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-primary"></i> contact@asanul.com</li>
-                            <li class="flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-primary"></i> security@asanul.com</li>
-                            <li class="flex items-center gap-2"><i data-lucide="phone" class="w-4 h-4 text-primary"></i> +880 1XXX-XXXXXX (WhatsApp)</li>
+                        <ul class="space-y-3 text-light-textMuted dark:text-textMuted font-mono text-sm">
+                            <li class="flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-light-primary dark:text-primary"></i> contact@asanul.com</li>
+                            <li class="flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-light-primary dark:text-primary"></i> security@asanul.com</li>
+                            <li class="flex items-center gap-2"><i data-lucide="phone" class="w-4 h-4 text-light-primary dark:text-primary"></i> +880 1XXX-XXXXXX (WhatsApp)</li>
                         </ul>
-                         <ul class="space-y-3 text-textMuted font-mono text-sm">
-                            <li class="flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4 text-secondary"></i> Dhaka, Bangladesh</li>
-                            <li class="flex items-center gap-2"><i data-lucide="clock" class="w-4 h-4 text-secondary"></i> GMT +6 (Available 9 AM - 6 PM)</li>
-                            <li class="flex items-center gap-2"><i data-lucide="key" class="w-4 h-4 text-secondary"></i> PGP KEY: 0x4A1B...9F</li>
+                         <ul class="space-y-3 text-light-textMuted dark:text-textMuted font-mono text-sm">
+                            <li class="flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4 text-light-secondary dark:text-secondary"></i> Dhaka, Bangladesh</li>
+                            <li class="flex items-center gap-2"><i data-lucide="clock" class="w-4 h-4 text-light-secondary dark:text-secondary"></i> GMT +6 (Available 9 AM - 6 PM)</li>
+                            <li class="flex items-center gap-2"><i data-lucide="key" class="w-4 h-4 text-light-secondary dark:text-secondary"></i> PGP KEY: 0x4A1B...9F</li>
                         </ul>
                     </div>
                 </div>
             </div>
             
-            <div class="border-t border-white/5 pt-8 text-center">
-                <p class="text-[#565d6d] text-xs font-mono">
+            <div class="border-t border-gray-200 dark:border-white/5 pt-8 text-center">
+                <p class="text-gray-500 dark:text-[#565d6d] text-xs font-mono">
                     © <span id="current-year">2025</span> ASANUL HOQUE ESAN. ALL RIGHTS RESERVED.
                 </body
             </div>
@@ -638,36 +767,37 @@
     </footer>
 
     <!-- 12. MODAL STRUCTURE -->
+    <!-- MODIFIED: Light/dark classes -->
     <div id="modal-container" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
         <!-- Overlay -->
         <div id="modal-overlay" class="modal-overlay fixed inset-0"></div>
         
         <!-- Modal Panel -->
-        <div id="modal-panel" class="relative z-10 w-full max-w-xl bg-card border border-white/10 rounded-2xl shadow-2xl overflow-hidden transform transition-all">
+        <div id="modal-panel" class="relative z-10 w-full max-w-xl bg-light-card dark:bg-card border border-gray-200 dark:border-white/10 rounded-2xl shadow-2xl overflow-hidden transform transition-all">
             <!-- Header -->
-            <div class="flex items-center justify-between p-6 border-b border-white/10">
-                <h3 id="modal-title" class="text-2xl font-bold text-white">Modal Title</h3>
-                <button id="modal-close-btn" class="text-textMuted hover:text-white">
+            <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-white/10">
+                <h3 id="modal-title" class="text-2xl font-bold text-light-textMain dark:text-white">Modal Title</h3>
+                <button id="modal-close-btn" class="text-light-textMuted dark:text-textMuted hover:text-light-textMain dark:hover:text-white">
                     <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
             
             <!-- Content -->
-            <div id="modal-content" class="p-6 max-h-[60vh] overflow-y-auto text-textMuted space-y-4">
+            <div id="modal-content" class="p-6 max-h-[60vh] overflow-y-auto text-light-textMuted dark:text-textMuted space-y-4">
                 <!-- Content injected by JS -->
                 <p>This is the modal content.</p>
             </div>
             
             <!-- Footer (for links or pagination) -->
-            <div id="modal-footer" class="p-6 bg-bg border-t border-white/10 flex justify-between items-center">
+            <div id="modal-footer" class="p-6 bg-light-bg dark:bg-bg border-t border-gray-200 dark:border-white/10 flex justify-between items-center">
                 <a id="modal-link" href="#" target="_blank" class="hidden btn-gradient px-6 py-2 text-white rounded-lg font-bold text-sm transition-all">
                     Learn More
                 </a>
                 <!-- Pagination for Logs -->
                 <div id="modal-pagination" class="hidden w-full flex justify-between items-center text-sm font-mono">
-                    <button id="log-prev-btn" class="px-4 py-2 bg-white/10 border border-white/20 rounded hover:bg-white/20 transition-all">Previous</button>
+                    <button id="log-prev-btn" class="px-4 py-2 bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/20 rounded hover:bg-black/10 dark:hover:bg-white/20 transition-all">Previous</button>
                     <span id="log-page-info">Page 1 of 10</span>
-                    <button id="log-next-btn" class="px-4 py-2 bg-white/10 border border-white/20 rounded hover:bg-white/20 transition-all">Next</button>
+                    <button id="log-next-btn" class="px-4 py-2 bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/20 rounded hover:bg-black/10 dark:hover:bg-white/20 transition-all">Next</button>
                 </div>
             </div>
         </div>
@@ -723,6 +853,53 @@
                 if (loaderText) loaderText.innerText = textContent;
             }, 150);
         }
+        
+        // --- 1.8 NEW: THEME TOGGLE LOGIC ---
+        const themeToggleDesktop = document.getElementById('theme-toggle-desktop');
+        const themeToggleMobile = document.getElementById('theme-toggle-mobile');
+        const sunIcons = [document.getElementById('theme-icon-sun-desktop'), document.getElementById('theme-icon-sun-mobile')];
+        const moonIcons = [document.getElementById('theme-icon-moon-desktop'), document.getElementById('theme-icon-moon-mobile')];
+
+        // Function to apply theme
+        function applyTheme(isDark) {
+            if (isDark) {
+                document.documentElement.classList.add('dark');
+                sunIcons.forEach(icon => icon.classList.remove('hidden'));
+                moonIcons.forEach(icon => icon.classList.add('hidden'));
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+                sunIcons.forEach(icon => icon.classList.add('hidden'));
+                moonIcons.forEach(icon => icon.classList.remove('hidden'));
+                localStorage.setItem('theme', 'light');
+            }
+            // Re-render icons to apply new colors if needed
+            // Use a small timeout to ensure icons are in the DOM
+            setTimeout(() => lucide.createIcons(), 0);
+        }
+
+        // Check for saved theme or system preference
+        const savedTheme = localStorage.getItem('theme');
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+            applyTheme(true);
+        } else {
+            applyTheme(false);
+        }
+        
+        // Add smooth scrolling
+        document.documentElement.classList.add('scroll-smooth');
+
+        // Add click listeners
+        function toggleTheme() {
+            const isDark = document.documentElement.classList.contains('dark');
+            applyTheme(!isDark);
+        }
+
+        if (themeToggleDesktop) themeToggleDesktop.addEventListener('click', toggleTheme);
+        if (themeToggleMobile) themeToggleMobile.addEventListener('click', toggleTheme);
+        // --- END THEME LOGIC ---
 
 
         // --- 2. MOBILE MENU ---
@@ -749,12 +926,13 @@
         });
 
         // --- 2.5 NAV SCROLLSPY (Active Underline) ---
-        const navLinks = document.querySelectorAll('#desktop-nav-links a.nav-link');
+        const desktopNavLinks = document.querySelectorAll('#desktop-nav-links .nav-link');
+        const mobileNavLinks = document.querySelectorAll('#mobile-nav-links .nav-link-mobile');
         const sections = document.querySelectorAll('section[id]');
 
         const observerOptions = {
             root: null, // viewport
-            rootMargin: '-40% 0px -40% 0px', // MODIFIED: Wider margin for smoother transition
+            rootMargin: '-40% 0px -40% 0px', // Wider margin for smoother transition
             threshold: 0 // As soon as it hits the center line
         };
 
@@ -762,13 +940,14 @@
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const id = entry.target.getAttribute('id');
-                    const activeLink = document.querySelector(`#desktop-nav-links a[href="#${id}"]`);
+                    const activeDesktopLink = document.querySelector(`#desktop-nav-links a[href="#${id}"]`);
+                    const activeMobileLink = document.querySelector(`#mobile-nav-links a[href="#${id}"]`);
                     
-                    navLinks.forEach(link => link.classList.remove('nav-active'));
+                    desktopNavLinks.forEach(link => link.classList.remove('nav-active'));
+                    mobileNavLinks.forEach(link => link.classList.remove('nav-active'));
                     
-                    if (activeLink) {
-                        activeLink.classList.add('nav-active');
-                    }
+                    if (activeDesktopLink) activeDesktopLink.classList.add('nav-active');
+                    if (activeMobileLink) activeMobileLink.classList.add('nav-active');
                 }
             });
         };
@@ -776,30 +955,34 @@
         const scrollObserver = new IntersectionObserver(observerCallback, observerOptions);
         sections.forEach(section => scrollObserver.observe(section));
 
-        // Set initial active link on load
         window.addEventListener('load', () => {
             setTimeout(() => {
-                // Find the first visible section (in case of hash link)
-                let firstVisibleSection = document.querySelector('#desktop-nav-links a[href="#STATUS"]');
-                let found = false;
-                for (let section of sections) {
-                    const rect = section.getBoundingClientRect();
-                    if (rect.top >= 0 && rect.top < window.innerHeight / 2) {
-                        firstVisibleSection = document.querySelector(`#desktop-nav-links a[href="#${section.id}"]`);
-                        found = true;
-                        break;
+                let activeSectionId = 'STATUS'; // Default
+                
+                if (window.location.hash && document.querySelector(window.location.hash)) {
+                     activeSectionId = window.location.hash.substring(1);
+                } 
+                else if (window.scrollY === 0) {
+                     activeSectionId = 'STATUS';
+                } else {
+                    for (let section of sections) {
+                        const rect = section.getBoundingClientRect();
+                        if (rect.top >= 0 && rect.top < window.innerHeight / 2) {
+                            activeSectionId = section.id;
+                            break;
+                        }
                     }
                 }
-                if (!found && window.scrollY === 0) {
-                     firstVisibleSection = document.querySelector('#desktop-nav-links a[href="#STATUS"]');
-                }
+
+                const activeDesktopLink = document.querySelector(`#desktop-nav-links a[href="#${activeSectionId}"]`);
+                const activeMobileLink = document.querySelector(`#mobile-nav-links a[href="#${activeSectionId}"]`);
+
+                desktopNavLinks.forEach(link => link.classList.remove('nav-active'));
+                mobileNavLinks.forEach(link => link.classList.remove('nav-active'));
                 
-                navLinks.forEach(link => link.classList.remove('nav-active'));
-                if (firstVisibleSection) {
-                    firstVisibleSection.classList.add('nav-active');
-                } else if (navLinks.length > 0) {
-                    navLinks[0].classList.add('nav-active'); // Default to first
-                }
+                if (activeDesktopLink) activeDesktopLink.classList.add('nav-active');
+                if (activeMobileLink) activeMobileLink.classList.add('nav-active');
+
             }, 100);
         });
 
@@ -835,7 +1018,6 @@
             
             setTimeout(type, typeSpeed);
         }
-        // Delay typing until after preloader
         setTimeout(type, 4000); // Start after preloader finishes
 
         // --- 4. STATS COUNTER ---
@@ -853,7 +1035,6 @@
             window.requestAnimationFrame(step);
         }
 
-        // Intersection Observer to trigger count-up
         const profileSection = document.getElementById('PROFILE');
         let statsAnimated = false;
         const statsObserver = new IntersectionObserver((entries) => {
@@ -864,7 +1045,7 @@
                 statsAnimated = true;
                 statsObserver.disconnect();
             }
-        }, { threshold: 0.1 }); // <-- MODIFIED: Changed 0.5 to 0.1 for mobile
+        }, { threshold: 0.1 });
         
         if (profileSection) {
             statsObserver.observe(profileSection);
@@ -872,38 +1053,35 @@
 
         // --- 5. MODAL DATA STORE ---
         const modalDetails = {
-            // --- Full About Me Content ---
             "about-me-full": { 
                 title: "About Asanul Hoque Esan", 
                 content: `
-                    <div class='space-y-4 text-textMain/90'>
+                    <!-- MODIFIED: Light/dark text classes -->
+                    <div class='space-y-4 text-light-textMain dark:text-textMain/90'>
                         <p class='text-lg'>Hello! I'm Asanul Hoque Esan, a dedicated cybersecurity professional driven by a deep-seated passion for digital defense. My journey into technology wasn't just a career choice; it was a calling.</p>
                         
-                        <h4 class='text-xl font-bold text-secondary pt-2'>My Philosophy</h4>
+                        <h4 class='text-xl font-bold text-light-secondary dark:text-secondary pt-2'>My Philosophy</h4>
                         <p>I operate on a simple philosophy: "Think like an adversary, defend as a guardian." This dual perspective allows me to anticipate threats and build resilient systems. I don't just look for vulnerabilities; I seek to understand the "why" behind them—the design flaw, the human error, the business pressure—to provide holistic and sustainable security solutions.</p>
                         
-                        <h4 class='text-xl font-bold text-secondary pt-2'>What I Do</h4>
+                        <h4 class='text-xl font-bold text-light-secondary dark:text-secondary pt-2'>What I Do</h4>
                         <p>My expertise spans the full spectrum of offensive security. On any given day, you might find me:</p>
-                        <ul class='list-disc list-inside pl-4 text-textMuted'>
+                        <ul class='list-disc list-inside pl-4 text-light-textMuted dark:text-textMuted'>
                             <li>Reverse-engineering malware to understand its payload and C2 infrastructure.</li>
                             <li>Simulating multi-stage attacks (Red Teaming) to test an organization's detection and response.</li>
                             <li>Auditing cloud infrastructure on AWS and Azure for IAM misconfigurations and insecure services.</li>
                             <li>Performing deep-dive web application tests, hunting for everything from simple XSS to complex business logic flaws.</li>
                         </ul>
                         
-                        <h4 class='text-xl font-bold text-secondary pt-2'>Beyond the Terminal</h4>
+                        <h4 class='text-xl font-bold text-light-secondary dark:text-secondary pt-2'>Beyond the Terminal</h4>
                         <p>When I'm not in front of a screen, I'm an active member of the cybersecurity community. I believe in the power of shared knowledge, which is why I frequently contribute to open-source projects, write blog posts on new attack vectors, and mentor aspiring security professionals.</p>
                         <p>I'm also an avid CTF player (you'll find me on HackTheBox and TryHackMe) and a lifelong learner. The threat landscape never sleeps, and neither does my desire to learn and adapt.</p>
                         
-                        <h4 class='text-xl font-bold text-secondary pt-2'>Let's Connect</h4>
+                        <h4 class='text-xl font-bold text-light-secondary dark:text-secondary pt-2'>Let's Connect</h4>
                         <p>I'm always open to discussing new challenges, collaborating on projects, or simply talking about the latest trends in security. Feel free to reach out via LinkedIn.</p>
                     </div>
                 `, 
-                link: "https://www.linkedin.com/in/asanul-h-esan" // Example link
+                link: "https://www.linkedin.com/in/asanul-h-esan"
             },
-            // --- End new content ---
-
-            // Tools
             "tool-burp": { title: "Burp Suite", content: "The industry-standard tool for web application security testing. Used for mapping, scanning, and exploiting vulnerabilities.", link: "https://portswigger.net/burp" },
             "tool-nmap": { title: "Nmap", content: "Network Mapper is a free and open-source utility for network discovery and security auditing.", link: "https://nmap.org" },
             "tool-metasploit": { title: "Metasploit", content: "A powerful penetration testing framework that makes hacking simple. Used for developing and executing exploit code.", link: "https://www.metasploit.com/" },
@@ -918,8 +1096,6 @@
             "tool-netcat": { title: "Netcat", content: "A networking utility for reading from and writing to network connections using TCP or UDP.", link: "https://nmap.org/ncat/" },
             "tool-gobuster": { title: "Gobuster", content: "A tool used to brute-force URIs (directories and files), DNS subdomains, and virtual host names.", link: "https://github.com/OJ/gobuster" },
             "tool-hydra": { title: "Hydra", content: "A parallelized network logon cracker which supports numerous protocols to attack.", link: "https://github.com/vanhauser-thc/thc-hydra" },
-            
-            // Vulnerabilities
             "vuln-sql": { title: "SQL Injection (SQLi)", content: "A web security vulnerability that allows an attacker to interfere with the queries that an application makes to its database.", link: "https://portswigger.net/web-security/sql-injection" },
             "vuln-xss": { title: "Cross-Site Scripting (XSS)", content: "A vulnerability that allows attackers to inject client-side scripts into web pages viewed by other users.", link: "https://owasp.org/www-community/attacks/Cross_Site_Scripting_(XSS)" },
             "vuln-rce": { title: "Remote Code Execution (RCE)", content: "A critical vulnerability that allows an attacker to execute arbitrary commands on the target server.", link: "https://owasp.org/www-project-top-ten/2017/A1_2017-Injection" },
@@ -933,22 +1109,16 @@
             "vuln-xxe": { title: "XML External Entity (XXE)", content: "A vulnerability that allows an attacker to interfere with an application's processing of XML data.", link: "https://portswigger.net/web-security/xxe" },
             "vuln-cmd": { title: "Command Injection", content: "Allows attackers to execute arbitrary commands on the host operating system via a vulnerable application.", link: "https://portswigger.net/web-security/command-injection" },
             "vuln-oast": { title: "Out-of-Band Application Security Testing (OAST)", content: "A technique for finding vulnerabilities using an external service to monitor for resulting network interactions.", link: "https://portswigger.net/burp/oast" },
-
-            // Platforms
             "platform-hackerone": { title: "HackerOne", content: "Achieved 'Top 1%' rank by consistently reporting high-impact vulnerabilities for multiple enterprise clients.", link: "https://hackerone.com/asanul_h_esan" },
             "platform-bugcrowd": { title: "Bugcrowd", content: "Ranked in the 'Top 50' globally. Recognized for contributions to various public and private bug bounty programs.", link: "https://bugcrowd.com/asanul_h_esan" },
             "platform-htb": { title: "HackTheBox", content: "Achieved 'Pro Hacker' and 'Guru' ranks. Regularly solve 'Insane' rated machines and challenges.", link: "https://app.hackthebox.com/profile/12345" },
             "platform-thm": { title: "TryHackMe", content: "Consistently in the 'Top 1%' of users. Completed over 200 rooms and various learning paths.", link: "https://tryhackme.com/p/asanul" },
             "platform-portswigger": { title: "PortSwigger", content: "Completed the Web Security Academy and hold the Burp Suite Certified Practitioner (BSCP) certification.", link: "https://portswigger.net/web-security" },
             "platform-generic": { title: "Platform Details", content: "This is a placeholder for one of the 45 other platforms. The real site would show specific achievements for this platform.", link: "#" },
-
-            // Certifications
             "cert-oscp": { title: "OSCP - Offensive Security Certified Professional", content: "A rigorous certification that proves hands-on penetration testing skills. Requires compromising a 24-hour exam network.", link: "https://www.offensive-security.com/pwk-oscp/" },
             "cert-ceh": { title: "CEH (Practical)", content: "A hands-on exam that requires demonstrating skills and techniques in ethical hacking.", link: "https://www.eccouncil.org/train-certify/certified-ethical-hacker-ceh-practical/" },
             "cert-ejpt": { title: "eJPT - eLearnSecurity Junior Penetration Tester", content: "A 100% practical certification on penetration testing and information security fundamentals.", link: "https://elearnsecurity.com/product/ejpt-certification/" },
             "cert-secplus": { title: "CompTIA Security+", content: "A global certification that validates the baseline skills necessary to perform core security functions.", link: "https://www.comptia.org/certifications/security" },
-            
-            // Expertise
             "exp-web": { title: "Web Application Pentesting", content: "Deep expertise in finding and exploiting common (OWASP Top 10) and complex vulnerabilities like SQLi, XSS, RCE, SSRF, and business logic flaws.", link: "https://owasp.org/www-project-top-ten/" },
             "exp-net": { title: "Network Security", content: "Proficient in network mapping (Nmap), vulnerability scanning (Nessus), and exploiting network-level misconfigurations.", link: "https://www.sans.org/cyber-security-courses/network-penetration-testing-ethical-hacking/" },
             "exp-cloud": { title: "Cloud Security (AWS/Azure)", content: "Experience in auditing cloud environments, identifying misconfigured S3 buckets, IAM role vulnerabilities, and insecure serverless functions.", link: "https://aws.amazon.com/security/" },
@@ -997,19 +1167,19 @@
             ]
         };
 
-        function createMarqueeItem(item, colorClass) {
+        function createMarqueeItem(item, colorClass, darkColorClass) {
             const div = document.createElement('div');
-            // Add flex, items-center, and gap-2
-            div.className = `marquee-item flex-shrink-0 flex items-center gap-2 px-6 py-3 border border-white/10 rounded-full bg-card text-sm font-mono text-textMain whitespace-nowrap cursor-pointer hover:border-primary`;
+            // MODIFIED: Light/dark classes
+            div.className = `marquee-item flex-shrink-0 flex items-center gap-2 px-6 py-3 border border-gray-300 dark:border-white/10 rounded-full bg-light-card dark:bg-card text-sm font-mono text-light-textMain dark:text-textMain whitespace-nowrap cursor-pointer hover:border-light-primary dark:hover:border-primary`;
             
             let innerHTML = '';
             if (item.icon) {
-                // Use the provided color class
-                innerHTML += `<i data-lucide="${item.icon}" class="w-4 h-4 ${colorClass}"></i>`;
+                // MODIFIED: Light/dark color classes
+                innerHTML += `<i data-lucide="${item.icon}" class="w-4 h-4 ${colorClass} dark:${darkColorClass}"></i>`;
             }
             innerHTML += `<span>${item.text || item.title}</span>`;
             
-            div.innerHTML = innerHTML; // Use innerHTML
+            div.innerHTML = innerHTML;
 
             if (item.id && (modalDetails[item.id] || item.content)) {
                 div.setAttribute('data-modal-target', item.id);
@@ -1017,7 +1187,7 @@
             return div;
         }
 
-        function populateMarquee(containerId, data, count = 50, iconColorClass) {
+        function populateMarquee(containerId, data, count = 50, iconColorClass, darkIconColorClass) {
             const container = document.getElementById(containerId);
             if (!container) {
                 console.error(`Marquee container with id "${containerId}" not found.`);
@@ -1030,15 +1200,15 @@
             }
             
             [...items, ...items].forEach((item) => {
-                container.appendChild(createMarqueeItem(item, iconColorClass)); // Pass the color class
+                container.appendChild(createMarqueeItem(item, iconColorClass, darkIconColorClass)); // Pass light/dark colors
             });
             lucide.createIcons(); // Re-render icons
         }
 
-        // Call populateMarquee with specific icon colors
-        populateMarquee('tools-marquee', marqueeData.tools, 50, 'text-secondary'); // Tools = secondary color
-        populateMarquee('vuln-marquee', marqueeData.vulns, 50, 'text-primary'); // Vulns = primary color
-        populateMarquee('reports-marquee', marqueeData.reports, 20, 'text-textMuted'); // Reports = muted color
+        // MODIFIED: Call populateMarquee with light AND dark icon colors
+        populateMarquee('tools-marquee', marqueeData.tools, 50, 'text-light-secondary', 'text-secondary');
+        populateMarquee('vuln-marquee', marqueeData.vulns, 50, 'text-light-primary', 'text-primary');
+        populateMarquee('reports-marquee', marqueeData.reports, 20, 'text-light-textMuted', 'text-textMuted');
 
         // --- 7. EXPERTISE GRID INJECTION ---
         const expertiseGrid = document.getElementById('expertise-grid');
@@ -1052,12 +1222,13 @@
         if (expertiseGrid) {
             expertiseData.forEach(item => {
                 const card = document.createElement('div');
-                card.className = "p-6 rounded-lg border border-white/10 bg-card transition-all duration-300 hover:!scale-105 hover:border-secondary/50 cursor-pointer shadow-lg";
+                // MODIFIED: Light/dark classes
+                card.className = "p-6 rounded-lg border border-gray-200 dark:border-white/10 bg-light-card dark:bg-card transition-all duration-300 hover:!scale-105 hover:border-light-secondary/50 dark:hover:border-secondary/50 cursor-pointer shadow-lg";
                 card.setAttribute('data-modal-target', item.id);
                 card.innerHTML = `
-                    <i data-lucide="${item.icon}" class="text-secondary mb-3 w-8 h-8"></i>
-                    <h3 class="font-bold text-white text-lg">${item.title}</h3>
-                    <p class="text-xs text-textMuted mt-2">${item.desc}</p>
+                    <i data-lucide="${item.icon}" class="text-light-secondary dark:text-secondary mb-3 w-8 h-8"></i>
+                    <h3 class="font-bold text-light-textMain dark:text-white text-lg">${item.title}</h3>
+                    <p class="text-xs text-light-textMuted dark:text-textMuted mt-2">${item.desc}</p>
                 `;
                 expertiseGrid.appendChild(card);
             });
@@ -1081,37 +1252,29 @@
                 const state = platformToggleBtn.getAttribute('data-state');
 
                 if (state === 'more') {
-                    // Load platforms if not already loaded
                     if (!isLoaded) {
                         mockPlatformsData.forEach(platform => {
                             const card = document.createElement('a');
                             card.setAttribute('data-modal-target', 'platform-generic');
-                            card.className = "p-6 bg-bg border border-white/10 rounded-xl text-center hover:border-primary/50 hover:-translate-y-2 transition-all duration-300 shadow-lg h-full cursor-pointer";
+                            // MODIFIED: Light/dark classes
+                            card.className = "p-6 bg-light-card dark:bg-bg border border-gray-200 dark:border-white/10 rounded-xl text-center hover:border-light-primary/50 dark:hover:border-primary/50 hover:-translate-y-2 transition-all duration-300 shadow-lg h-full cursor-pointer";
                             
                             card.innerHTML = `
-                                <i data-lucide="${platform.icon}" class="w-10 h-10 text-textMuted mx-auto mb-4"></i>
-                                <h3 class="font-bold text-white text-lg">${platform.name}</h3>
-                                <p class="text-secondary text-sm font-mono mt-1">${platform.rank}</p>
+                                <i data-lucide="${platform.icon}" class="w-10 h-10 text-light-textMuted dark:text-textMuted mx-auto mb-4"></i>
+                                <h3 class="font-bold text-light-textMain dark:text-white text-lg">${platform.name}</h3>
+                                <p class="text-light-secondary dark:text-secondary text-sm font-mono mt-1">${platform.rank}</p>
                             `;
                             morePlatformsGrid.appendChild(card);
                         });
-                        // Re-render icons for the new cards
                         lucide.createIcons();
-                        isLoaded = true; // Set flag to true
+                        isLoaded = true;
                     }
-                    
-                    // Show the grid
                     morePlatformsGrid.classList.remove('hidden');
-                    
-                    // Update button
                     platformToggleBtn.setAttribute('data-state', 'less');
                     platformToggleBtn.innerText = "See Less";
 
                 } else if (state === 'less') {
-                    // Hide the grid
                     morePlatformsGrid.classList.add('hidden');
-                    
-                    // Update button
                     platformToggleBtn.setAttribute('data-state', 'more');
                     platformToggleBtn.innerText = "See More (45+)";
                 }
@@ -1130,13 +1293,12 @@
 
         function openModal(title, content, link = null) {
             modalTitle.innerText = title;
-            modalContent.innerHTML = content; // Use innerHTML to allow formatted content
-            modalPagination.classList.add('hidden'); // Hide pagination by default
+            modalContent.innerHTML = content;
+            modalPagination.classList.add('hidden');
 
             if (link) {
                 modalLink.href = link;
                 modalLink.classList.remove('hidden');
-                // MODIFIED: Change text for LinkedIn link
                 if (link.includes('linkedin.com')) {
                     modalLink.innerHTML = 'View LinkedIn Profile';
                 } else {
@@ -1146,38 +1308,34 @@
                 modalLink.classList.add('hidden');
             }
             modalContainer.classList.remove('hidden');
-            lucide.createIcons(); // Re-render icons if any in modal
+            lucide.createIcons(); 
         }
 
         function closeModal() {
             modalContainer.classList.add('hidden');
-            modalContent.innerHTML = ''; // Clear content
+            modalContent.innerHTML = '';
         }
 
         modalCloseBtn.addEventListener('click', closeModal);
         modalOverlay.addEventListener('click', closeModal);
 
-        // General click listener for all modal triggers
         document.body.addEventListener('click', function(e) {
             const target = e.target.closest('[data-modal-target]');
             if (target) {
                 const targetId = target.getAttribute('data-modal-target');
                 let details;
 
-                // Check marquee reports data
                 if (targetId.startsWith('report-')) {
                     const report = marqueeData.reports.find(r => r.id === targetId);
                     if (report) {
                         details = { title: report.title, content: `<p>${report.content}</p>`, link: report.link };
                     }
                 } 
-                // Check main details store
                 else if (modalDetails[targetId]) {
                     details = modalDetails[targetId];
                 }
 
                 if (details) {
-                    // MODIFIED: Check for "about-me-full" to use innerHTML directly
                     if (targetId === "about-me-full") {
                         openModal(details.title, details.content, details.link);
                     } else {
@@ -1189,11 +1347,10 @@
 
         // --- 9. SPECIAL MODALS (CERTS & LOGS) ---
         
-        // "See All Certifications" Button
         const seeAllCertsBtn = document.getElementById('see-all-certs-btn');
         if (seeAllCertsBtn) {
             seeAllCertsBtn.addEventListener('click', () => {
-                const allCertsData = [ // Mock data for all certs
+                const allCertsData = [
                     { id: "cert-oscp", icon: "award", title: "OSCP", org: "Offensive Security" },
                     { id: "cert-ceh", icon: "award", title: "CEH (Practical)", org: "EC-Council" },
                     { id: "cert-ejpt", icon: "award", title: "eJPT", org: "eLearnSecurity" },
@@ -1206,22 +1363,21 @@
 
                 let certsGridHtml = '<div class="grid grid-cols-2 md:grid-cols-3 gap-4">';
                 allCertsData.forEach(cert => {
+                    // MODIFIED: Light/dark classes
                     certsGridHtml += `
-                        <div data-modal-target="${cert.id}" class="p-4 rounded-lg border border-white/10 bg-bg transition-all hover:border-secondary cursor-pointer">
-                            <i data-lucide="${cert.icon}" class="text-secondary mb-2 w-6 h-6"></i>
-                            <h3 class="font-bold text-white text-sm">${cert.title}</h3>
-                            <p class="text-xs text-textMuted mt-1">${cert.org}</p>
+                        <div data-modal-target="${cert.id}" class="p-4 rounded-lg border border-gray-200 dark:border-white/10 bg-light-bg dark:bg-bg transition-all hover:border-light-secondary dark:hover:border-secondary cursor-pointer">
+                            <i data-lucide="${cert.icon}" class="text-light-secondary dark:text-secondary mb-2 w-6 h-6"></i>
+                            <h3 class="font-bold text-light-textMain dark:text-white text-sm">${cert.title}</h3>
+                            <p class="text-xs text-light-textMuted dark:text-textMuted mt-1">${cert.org}</p>
                         </div>
                     `;
                 });
                 certsGridHtml += '</div>';
                 
                 openModal("All Certifications (40+)", certsGridHtml);
-                // Clicks inside this modal will be handled by the general modal listener
             });
         }
 
-        // "See All Logs" Button with Pagination
         const seeAllLogsBtn = document.getElementById('see-all-logs-btn');
         if (seeAllLogsBtn) {
             const allLogs = Array.from({ length: 100 }, (_, i) => ({
@@ -1241,14 +1397,14 @@
                 const pageLogs = allLogs.slice(start, end);
 
                 let logsHtml = `
-                    <table class="w-full text-left text-sm text-textMuted">
-                        <thead class="bg-card text-xs uppercase font-mono text-primary">
+                    <table class="w-full text-left text-sm text-light-textMuted dark:text-textMuted">
+                        <thead class="bg-gray-100 dark:bg-card text-xs uppercase font-mono text-light-primary dark:text-primary">
                             <tr><th class="px-6 py-4">Timestamp</th><th class="px-6 py-4">Action</th><th class="px-6 py-4">Status</th></tr>
                         </thead>
-                        <tbody class="divide-y divide-white/5 font-mono">
+                        <tbody class="divide-y divide-gray-200 dark:divide-white/5 font-mono">
                 `;
                 pageLogs.forEach(log => {
-                    logsHtml += `<tr class="hover:bg-white/5"><td class="px-6 py-4">${log.time}</td><td class="px-6 py-4 text-white">${log.action}</td><td class="px-6 py-4 text-right"><span classs="px-2 py-1 bg-primary/20 text-primary rounded text-xs">${log.status}</span></td></tr>`;
+                    logsHtml += `<tr class="hover:bg-gray-50 dark:hover:bg-white/5"><td class="px-6 py-4">${log.time}</td><td class="px-6 py-4 text-light-textMain dark:text-white">${log.action}</td><td class="px-6 py-4 text-right"><span classs="px-2 py-1 bg-light-primary/10 dark:bg-primary/20 text-light-primary dark:text-primary rounded text-xs">${log.status}</span></td></tr>`;
                 });
                 logsHtml += `</tbody></table>`;
                 
@@ -1259,7 +1415,7 @@
             }
 
             seeAllLogsBtn.addEventListener('click', () => {
-                openModal("Full Access Log", ""); // Open with empty content first
+                openModal("Full Access Log", ""); 
                 modalLink.classList.add('hidden');
                 modalPagination.classList.remove('hidden');
                 showLogsPage(1);
@@ -1280,19 +1436,18 @@
         const algoList = document.getElementById('algo-list');
         const currentAlgoName = document.getElementById('current-algo-name');
         
-        // Render Algo Buttons
         if (algoList) {
             algos.forEach(algo => {
                 const btn = document.createElement('button');
-                btn.className = `w-full text-left px-4 py-3 rounded-lg text-sm transition-all flex justify-between items-center ${algo === currentAlgo ? 'bg-primary/10 text-primary border border-primary/30' : 'text-textMuted hover:bg-white/5'}`;
+                // MODIFIED: Light/dark classes
+                btn.className = `w-full text-left px-4 py-3 rounded-lg text-sm transition-all flex justify-between items-center ${algo === currentAlgo ? 'bg-light-primary/10 dark:bg-primary/10 text-light-primary dark:text-primary border border-light-primary/30 dark:border-primary/30' : 'text-light-textMuted dark:text-textMuted hover:bg-black/5 dark:hover:bg-white/5'}`;
                 btn.innerText = algo;
                 btn.onclick = () => {
                     currentAlgo = algo;
                     currentAlgoName.innerText = algo;
-                    // Update active class
                     Array.from(algoList.children).forEach(c => {
                         if (c.tagName === 'BUTTON') {
-                            c.className = `w-full text-left px-4 py-3 rounded-lg text-sm transition-all flex justify-between items-center ${c.innerText === algo ? 'bg-primary/10 text-primary border border-primary/30' : 'text-textMuted hover:bg-white/5'}`;
+                            c.className = `w-full text-left px-4 py-3 rounded-lg text-sm transition-all flex justify-between items-center ${c.innerText === algo ? 'bg-light-primary/10 dark:bg-primary/10 text-light-primary dark:text-primary border border-light-primary/30 dark:border-primary/30' : 'text-light-textMuted dark:text-textMuted hover:bg-black/5 dark:hover:bg-white/5'}`;
                         }
                     });
                 };
@@ -1300,7 +1455,6 @@
             });
         }
 
-        // Mock Crypto Functions
         function processCrypto(isDecrypt = false) {
             const input = document.getElementById('crypto-input').value;
             const outputEl = document.getElementById('crypto-output');
@@ -1355,11 +1509,10 @@
             const copyText = document.getElementById("crypto-output");
             if (!copyText.value) return;
             copyText.select();
-            document.execCommand('copy'); // Using execCommand for browser compatibility in iFrames
-            alert("Copied to clipboard!"); // Using alert as modals are complex for this context
+            document.execCommand('copy'); 
+            alert("Copied to clipboard!");
         }
 
-        // Re-render icons on resize (debounced)
         window.addEventListener('resize', debounce(lucide.createIcons, 250));
     </script>
 </body>
