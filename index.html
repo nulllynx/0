@@ -1,688 +1,1287 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- Favicon (multiple versions for different devices) -->
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <title>Asanul Hoque Esan | Cybersecurity Portfolio</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- 1. Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bg: "#0a0f1c", // Deep Navy/Graphite
+                        card: "#111827", // Darker Card
+                        primary: "#00C2FF", // Teal Accent
+                        secondary: "#06E6B3", // Secondary Teal
+                        textMain: "#E8EEF3", // Primary Text
+                        textMuted: "#97A0AA", // Secondary Text
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    animation: {
+                        'scroll-left': 'scrollLeft 30s linear infinite',
+                        'scroll-right': 'scrollRight 30s linear infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        scrollLeft: {
+                            '0%': { transform: 'translateX(0)' },
+                            '100%': { transform: 'translateX(-50%)' },
+                        },
+                        scrollRight: {
+                            '0%': { transform: 'translateX(-50%)' },
+                            '100%': { transform: 'translateX(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     
-    <!-- For modern browsers (PNG) -->
-    <link rel="icon" type="image/png" href="assets/images/logo.png">
-    
-    <!-- For Apple devices -->
-    <link rel="apple-touch-icon" href="assets/images/logo.png">
-    
-    <!-- For Windows 8/10 (Tile icon) -->
-    <meta name="msapplication-TileImage" content="assets/images/logo.png">
-    
-    <title>NullLynx | Cybersecurity Specialist</title>
-    <title>NullLynx | Bug Bounty Hunter</title>
-    <meta name="description" content="Asanul Hoque Esan (Zen Neo) - Professional Bug Bounty Hunter, Penetration Tester, and Ethical Hacker">
-    <meta name="keywords" content="bug bounty, penetration testing, ethical hacking, cybersecurity, CTF">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
-    
+    <!-- 2. Custom Styles -->
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0f1c; }
+        ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00C2FF; }
+        
+        /* Glassmorphism for Nav */
+        .glass {
+            background: rgba(10, 15, 28, 0.7); /* bg-bg with 70% opacity */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        /* Typing Cursor */
+        .typing-cursor::after {
+            content: '_';
+            animation: blink 1s step-start infinite;
+        }
+        
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* Marquee Hover Effects */
+        .marquee-container:hover .marquee-content {
+            animation-play-state: paused;
+        }
+        
+        .marquee-item {
+            transition: all 0.3s ease;
+        }
+        
+        /* Blur other items */
+        .marquee-container:hover .marquee-item {
+            filter: blur(2px);
+            opacity: 0.5;
+        }
+        
+        /* Highlight hovered item */
+        .marquee-container:hover .marquee-item:hover {
+            filter: blur(0px);
+            opacity: 1;
+            transform: scale(1.1);
+            z-index: 10;
+            border-color: #00C2FF;
+            box-shadow: 0 0 15px rgba(0, 194, 255, 0.3);
+        }
+
+        /* Gradient Button Glow */
+        .btn-gradient {
+            background-image: linear-gradient(to right, #00C2FF, #0099cc);
+            box-shadow: 0 0 20px rgba(0, 194, 255, 0.3);
+        }
+        .btn-gradient:hover {
+            box-shadow: 0 0 30px rgba(0, 194, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            background: rgba(10, 15, 28, 0.7); /* bg-bg with 70% opacity */
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        /* --- NEW: Nav Link Underline Styles --- */
+        .nav-link {
+            position: relative;
+            padding-bottom: 4px; /* Space for underline */
+            transition: color 0.3s ease;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background-color: #00C2FF; /* primary color */
+            transition: width 0.3s ease-in-out;
+        }
+        
+        /* Active state for normal links */
+        .nav-link.nav-active {
+            color: #00C2FF; /* text-primary */
+        }
+        .nav-link.nav-active::after {
+            width: 100%;
+        }
+        
+        /* Override for hover */
+        .nav-link:hover {
+             color: #00C2FF;
+        }
+
+        /* Special override for [ENCRYPT] link */
+        .nav-link[href="#ENCRYPT"] {
+            color: #06E6B3; /* text-secondary by default */
+        }
+        .nav-link[href="#ENCRYPT"]:hover {
+            color: #E8EEF3; /* textMain (white) on hover */
+        }
+        .nav-link[href="#ENCRYPT"].nav-active {
+            color: #06E6B3; /* text-secondary when active */
+        }
+        .nav-link[href="#ENCRYPT"].nav-active::after {
+            background-color: #06E6B3; /* secondary color underline */
+        }
+        /* --- END OF NEW STYLES --- */
+    </style>
 </head>
-<body>
-    <!-- Particle Background -->
-    <div id="particles-js"></div>
-    
-    <!-- Preloader -->
-    <div class="preloader">
-        <div class="loader">
-            <div class="loader-square"></div>
-            <div class="loader-square"></div>
-            <div class="loader-square"></div>
-            <div class="loader-square"></div>
-            <div class="loader-square"></div>
-            <div class="loader-square"></div>
-            <div class="loader-square"></div>
-        </div>
-    </div>
+<body class="bg-bg text-textMain selection:bg-primary/30 overflow-x-hidden">
 
-    <!-- Header/Navigation -->
-    <header class="header">
-        <div class="container">
-            <div class="logo">
-                <a href="#home">NullLynx</a>
-            </div>
-            <nav class="navbar">
-                <ul class="nav-links">
-                    <li><a href="#home" class="nav-link">Home</a></li>
-                    <li><a href="#about" class="nav-link">About</a></li>
-                    <li><a href="#skills" class="nav-link">Skills</a></li>
-                    <li><a href="#achievements" class="nav-link">Achievements</a></li>
-                    <li><a href="#reports" class="nav-link">Reports</a></li>
-                    <li><a href="#contact" class="nav-link">Contact</a></li>
-                </ul>
-                <div class="hamburger">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
+    <!-- 3. NAVIGATION -->
+    <nav class="fixed w-full z-50 glass border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center gap-2">
+                    <i data-lucide="terminal" class="text-primary w-6 h-6"></i>
+                    <span class="font-bold text-xl tracking-tighter text-white">null<span class="text-primary">lynx</span></span>
                 </div>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main>
-        <!-- Home Section -->
-        <section id="home" class="section home-section">
-            <div class="container">
-                <div class="home-content">
-                    <div class="home-text">
-                        <h4 class="greeting">Hello, I'm</h4>
-                        <h1 class="name">Asanul Hoque Esan</h1>
-                        <h2 class="title"><span class="typing-text"></span><span class="cursor">|</span></h2>
-                        <p class="description">I hunt vulnerabilities for a living and help organizations secure their digital assets through ethical hacking and penetration testing.</p>
-                        <div class="home-buttons">
-                            <a href="#contact" class="btn primary-btn">Contact Me</a>
-                            <a href="assets/resume.pdf" download class="btn secondary-btn">Download CV</a>
-                        </div>
-                    </div>
-                    <div class="home-image">
-                        <div class="image-wrapper">
-                            <img src="assets/images/profile.jpg" alt="Asanul Hoque Esan" class="profile-img">
-                            <div class="glow-effect"></div>
-                            <div class="cyber-border"></div>
-                        </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:block">
+                    <!-- ADDED: id="desktop-nav-links" -->
+                    <!-- ADDED: class="nav-link" to all links -->
+                    <!-- REMOVED: text-textMuted/text-secondary from links (now handled by CSS) -->
+                    <div class="ml-10 flex items-baseline space-x-4 font-mono text-sm uppercase" id="desktop-nav-links">
+                        <a href="#STATUS" class="nav-link px-2 py-1">STATUS</a>
+                        <a href="#PROFILE" class="nav-link px-2 py-1">PROFILE</a>
+                        <a href="#ANALYSIS" class="nav-link px-2 py-1">ANALYSIS</a>
+                        <a href="#ACCOMPLISH" class="nav-link px-2 py-1">ACCOMPLISH</a>
+                        <a href="#DOCUMENTS" class="nav-link px-2 py-1">DOCUMENTS</a>
+                        <a href="#ACCESS_LOG" class="nav-link px-2 py-1">ACCESS_LOG</a>
+                        <a href="#ENCRYPT" class="nav-link px-2 py-1">[ENCRYPT]</a>
                     </div>
                 </div>
-            </div>
-        </section>
 
-        <!-- About Section -->
-        <section id="about" class="section about-section">
-            <div class="container">
-                <h2 class="section-title">About <span>Me</span></h2>
-                <div class="about-content">
-                    <div class="about-image">
-                        <div class="hexagon-wrapper">
-                            <div class="hexagon">
-                                <img src="assets/images/avatar.jpg" alt="Asanul Hoque Esan">
-                            </div>
-                            <div class="hexagon-border"></div>
-                        </div>
-                    </div>
-                    <div class="about-text">
-                        <h3>Asanul Hoque Esan - The Bug Bounty Hunter</h3>
-                        <p>I'm a professional bug bounty hunter and penetration tester with over 5 years of experience in cybersecurity. My journey began when I discovered my passion for hacking through Capture The Flag competitions.</p>
-                        <p>I specialize in web application security, network penetration testing, and vulnerability assessment. My approach combines technical expertise with creative problem-solving to identify security flaws that others might miss.</p>
-                        <div class="about-stats">
-                            <div class="stat-item">
-                                <span class="stat-number">200+</span>
-                                <span class="stat-label">Vulnerabilities Found</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-number">50+</span>
-                                <span class="stat-label">Happy Clients</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-number">100%</span>
-                                <span class="stat-label">Ethical Approach</span>
-                            </div>
-                        </div>
-                    </div>
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="menu-btn" class="text-textMain hover:text-primary p-2">
+                        <i data-lucide="menu" id="menu-icon-open" class="block h-6 w-6"></i>
+                        <i data-lucide="x" id="menu-icon-close" class="hidden h-6 w-6"></i>
+                    </button>
                 </div>
-            </div>
-        </section>
-
-        <!-- Skills Section -->
-        <section id="skills" class="section skills-section">
-            <div class="container">
-                <h2 class="section-title">My <span>Skills</span></h2>
-                <div class="skills-content">
-                    <div class="skills-categories">
-                        <div class="category active" data-category="pentesting">Penetration Testing</div>
-                        <div class="category" data-category="web">Web Security</div>
-                        <div class="category" data-category="network">Network Security</div>
-                        <div class="category" data-category="tools">Tools</div>
-                    </div>
-                    <div class="skills-items">
-                        <!-- Penetration Testing Skills -->
-                        <div class="skills-grid pentesting show">
-                            <div class="skill-item">
-                                <div class="skill-icon">
-                                    <i class="fas fa-shield-alt"></i>
-                                </div>
-                                <h3>Vulnerability Assessment</h3>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="95%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-icon">
-                                    <i class="fas fa-bug"></i>
-                                </div>
-                                <h3>Exploit Development</h3>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="85%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-icon">
-                                    <i class="fas fa-lock"></i>
-                                </div>
-                                <h3>Privilege Escalation</h3>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="90%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-icon">
-                                    <i class="fas fa-terminal"></i>
-                                </div>
-                                <h3>Post-Exploitation</h3>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="80%"></div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Web Security Skills -->
-                        <div class="skills-grid web">
-                            <div class="skill-item">
-                                <div class="skill-icon">
-                                    <i class="fas fa-code"></i>
-                                </div>
-                                <h3>XSS</h3>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="98%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-icon">
-                                    <i class="fas fa-database"></i>
-                                </div>
-                                <h3>SQL Injection</h3>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="95%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-icon">
-                                    <i class="fas fa-server"></i>
-                                </div>
-                                <h3>CSRF</h3>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="90%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-icon">
-                                    <i class="fas fa-server"></i>
-                                </div>
-                                <h3>CSRF</h3>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="90%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-icon">
-                                    <i class="fas fa-server"></i>
-                                </div>
-                                <h3>CSRF</h3>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="90%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-icon">
-                                    <i class="fas fa-server"></i>
-                                </div>
-                                <h3>CSRF</h3>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="90%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-icon">
-                                    <i class="fas fa-server"></i>
-                                </div>
-                                <h3>CSRF</h3>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="90%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-icon">
-                                    <i class="fas fa-server"></i>
-                                </div>
-                                <h3>CSRF</h3>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="90%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-icon">
-                                    <i class="fas fa-server"></i>
-                                </div>
-                                <h3>CSRF</h3>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="90%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-icon">
-                                    <i class="fas fa-server"></i>
-                                </div>
-                                <h3>CSRF</h3>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="90%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-icon">
-                                    <i class="fas fa-server"></i>
-                                </div>
-                                <h3>CSRF</h3>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="90%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-icon">
-                                    <i class="fas fa-shield-virus"></i>
-                                </div>
-                                <h3>SSRF</h3>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="92%"></div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Network Security Skills -->
-                        <div class="skills-grid network">
-                            <div class="skill-item">
-                                <div class="skill-icon">
-                                    <i class="fas fa-network-wired"></i>
-                                </div>
-                                <h3>Network Scanning</h3>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="88%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-icon">
-                                    <i class="fas fa-wifi"></i>
-                                </div>
-                                <h3>Wireless Security</h3>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="85%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-icon">
-                                    <i class="fas fa-fire"></i>
-                                </div>
-                                <h3>Firewall Bypassing</h3>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="82%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-icon">
-                                    <i class="fas fa-broadcast-tower"></i>
-                                </div>
-                                <h3>MITM Attacks</h3>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="90%"></div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Tools Skills -->
-                        <div class="skills-grid tools">
-                            <div class="skill-item">
-                                <div class="skill-icon">
-                                    <i class="fas fa-terminal"></i>
-                                </div>
-                                <h3>Burp Suite</h3>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="97%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-icon">
-                                    <i class="fas fa-terminal"></i>
-                                </div>
-                                <h3>Burp Suite</h3>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="97%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-icon">
-                                    <i class="fas fa-terminal"></i>
-                                </div>
-                                <h3>Burp Suite</h3>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="97%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-icon">
-                                    <i class="fas fa-terminal"></i>
-                                </div>
-                                <h3>Burp Suite</h3>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="97%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-icon">
-                                    <i class="fas fa-terminal"></i>
-                                </div>
-                                <h3>Burp Suite</h3>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="97%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-icon">
-                                    <i class="fas fa-terminal"></i>
-                                </div>
-                                <h3>Burp Suite</h3>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="97%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-icon">
-                                    <i class="fas fa-terminal"></i>
-                                </div>
-                                <h3>Burp Suite</h3>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="97%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-icon">
-                                    <i class="fas fa-terminal"></i>
-                                </div>
-                                <h3>Burp Suite</h3>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="97%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-icon">
-                                    <i class="fas fa-terminal"></i>
-                                </div>
-                                <h3>Burp Suite</h3>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="97%"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="skill-item">
-                                <div class="skill-icon">
-                                    <i class="fas fa-terminal"></i>
-                                </div>
-                                <h3>Metasploit</h3>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="90%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-icon">
-                                    <i class="fas fa-terminal"></i>
-                                </div>
-                                <h3>Nmap</h3>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="95%"></div>
-                                </div>
-                            </div>
-                            <div class="skill-item">
-                                <div class="skill-icon">
-                                    <i class="fas fa-terminal"></i>
-                                </div>
-                                <h3>OWASP ZAP</h3>
-                                <div class="skill-bar">
-                                    <div class="skill-progress" data-width="92%"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Achievements Section -->
-        <section id="achievements" class="section achievements-section">
-            <div class="container">
-                <h2 class="section-title">My <span>Achievements</span></h2>
-                <div class="achievements-content">
-                    <div class="achievements-grid">
-                        <div class="achievement-card">
-                            <div class="achievement-icon">
-                                <img src="assets/hackerone.png" alt="HackerOne">
-                            </div>
-                            <h3>HackerOne</h3>
-                            <p>Top 1% Researcher with 150+ valid vulnerabilities reported</p>
-                            <div class="achievement-stats">
-                                <span class="stat">$250k+</span>
-                                <span class="stat-label">Total Bounty</span>
-                            </div>
-                            <a href="https://hackerone.com/zenneo" target="_blank" class="achievement-link">View Profile <i class="fas fa-external-link-alt"></i></a>
-                        </div>
-                        <div class="achievement-card">
-                            <div class="achievement-icon">
-                                <img src="assets/bugcrowd.png" alt="Bugcrowd">
-                            </div>
-                            <h3>Bugcrowd</h3>
-                            <p>Elite Hunter with consistent top rankings in private programs</p>
-                            <div class="achievement-stats">
-                                <span class="stat">Hall of Fame</span>
-                                <span class="stat-label">50+ Companies</span>
-                            </div>
-                            <a href="https://bugcrowd.com/zenneo" target="_blank" class="achievement-link">View Profile <i class="fas fa-external-link-alt"></i></a>
-                        </div>
-                        <div class="achievement-card">
-                            <div class="achievement-icon">
-                                <img src="assets/intigriti.png" alt="Intigriti">
-                            </div>
-                            <h3>Intigriti</h3>
-                            <p>Top researcher with multiple critical vulnerabilities found</p>
-                            <div class="achievement-stats">
-                                <span class="stat">Top 10</span>
-                                <span class="stat-label">Quarterly Rankings</span>
-                            </div>
-                            <a href="https://intigriti.com/zenneo" target="_blank" class="achievement-link">View Profile <i class="fas fa-external-link-alt"></i></a>
-                        </div>
-                        <div class="achievement-card">
-                            <div class="achievement-icon">
-                                <img src="assets/ctf.png" alt="CTF">
-                            </div>
-                            <h3>CTF Competitions</h3>
-                            <p>Multiple wins in international Capture The Flag competitions</p>
-                            <div class="achievement-stats">
-                                <span class="stat">1st Place</span>
-                                <span class="stat-label">5+ Events</span>
-                            </div>
-                            <a href="#" class="achievement-link">View Certificates <i class="fas fa-external-link-alt"></i></a>
-                        </div>
-                    </div>
-                    <div class="achievements-badges">
-                        <h3>Certifications & Badges</h3>
-                        <div class="badges-grid">
-                            <div class="badge-item" data-tooltip="Offensive Security Certified Professional">
-                                <img src="assets/oscp.png" alt="OSCP">
-                            </div>
-                            <div class="badge-item" data-tooltip="Certified Ethical Hacker">
-                                <img src="assets/ceh.png" alt="CEH">
-                            </div>
-                            <div class="badge-item" data-tooltip="Certified Web Security Professional">
-                                <img src="assets/cwsp.png" alt="CWSP">
-                            </div>
-                            <div class="badge-item" data-tooltip="eLearnSecurity Web Application Penetration Tester">
-                                <img src="assets/ewpt.png" alt="EWPT">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-      
-        <!-- Reports Section -->
-<section id="reports" class="section reports-section">
-    <div class="container">
-        <h2 class="section-title">My <span>Reports</span></h2>
-        <div class="reports-content">
-            <div class="reports-grid">
-                <!-- Reports will be dynamically loaded here -->
-            </div>
-            <div class="reports-controls">
-                <button id="seeMoreBtn" class="btn primary-btn">See More....</button>
-                <button id="showLessBtn" class="btn secondary-btn" style="display: none;">Show Less</button>
             </div>
         </div>
-    </div>
-</section>
-        <!-- Contact Section -->
-        <section id="contact" class="section contact-section">
-            <div class="container">
-                <h2 class="section-title">Get In <span>Touch</span></h2>
-                <div class="contact-content">
-                    <div class="contact-info">
-                        <h3>Let's Talk About Security</h3>
-                        <p>Interested in securing your systems or collaborating on a project? Reach out through any of these channels:</p>
-                        <div class="info-items">
-                            <div class="info-item">
-                                <div class="info-icon">
-                                    <i class="fas fa-envelope"></i>
-                                </div>
-                                <div class="info-text">
-                                    <h4>Email</h4>
-                                    <a href="mailto:nulllynx0@gmail.com">nulllynx0@gmail.com</a><br>
-                                    <a href="mailto:NullLynx@proton.me">NullLynx@proton.me</a>
-                                </div>
-                            </div>
-                            <div class="info-item">
-                                <div class="info-icon">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                </div>
-                                <div class="info-text">
-                                    <h4>Location</h4>
-                                    <span>Dhaka, Bangladesh</span>
-                                </div>
-                            </div>
-                            <div class="info-item">
-                                <div class="info-icon">
-                                    <i class="fas fa-phone-alt"></i>
-                                </div>
-                                <div class="info-text">
-                                    <h4>Whatsapp Me</h4>
-                                    <a href="https://wa.me/+8801323645550">+880 1323645550</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="contact-social">
-                            <h4>Follow Me</h4>
-                            <div class="social-links">
-                                <a href="https://www.facebook.com/ah.esan.90" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                                <a href="https://twitter.com/zenneo" target="_blank"><i class="fab fa-twitter"></i></a>
-                                <a href="https://instagram.com/zenneo" target="_blank"><i class="fab fa-instagram"></i></a>
-                                <a href="https://t.me/zenneo" target="_blank"><i class="fab fa-telegram-plane"></i></a>
-                                <a href="https://threads.net/zenneo" target="_blank"><i class="fab fa-threads"></i></a>
-                                <a href="https://github.com/zenneo" target="_blank"><i class="fab fa-github"></i></a>
-                                <a href="https://linkedin.com/in/zenneo" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="contact-form">
-                        <form id="contactForm" action="#" method="POST">
-                            <div class="form-group">
-                                <input type="text" name="name" id="name" required>
-                                <label for="name">Your Name</label>
-                                <span class="focus-border"></span>
-                            </div>
-                            <div class="form-group">
-                                <input type="email" name="email" id="email" required>
-                                <label for="email">Your Email</label>
-                                <span class="focus-border"></span>
-                            </div>
-                            <div class="form-group">
-                                <input type="text" name="subject" id="subject" required>
-                                <label for="subject">Subject</label>
-                                <span class="focus-border"></span>
-                            </div>
-                            <div class="form-group">
-                                <textarea name="message" id="message" required></textarea>
-                                <label for="message">Your Message</label>
-                                <span class="focus-border"></span>
-                            </div>
-                            <button type="submit" class="btn primary-btn">Send Message <i class="fas fa-paper-plane"></i></button>
-                        </form>
-                    </div>
-                </div>
+        <!-- Mobile Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-card border-b border-white/10">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 font-mono uppercase">
+                <a href="#STATUS" class="block px-3 py-2 rounded-md hover:bg-white/5 hover:text-primary">STATUS</a>
+                <a href="#PROFILE" class="block px-3 py-2 rounded-md hover:bg-white/5 hover:text-primary">PROFILE</a>
+                <a href="#ANALYSIS" class="block px-3 py-2 rounded-md hover:bg-white/5 hover:text-primary">ANALYSIS</a>
+                <a href="#ACCOMPLISH" class="block px-3 py-2 rounded-md hover:bg-white/5 hover:text-primary">ACCOMPLISH</a>
+                <a href="#DOCUMENTS" class="block px-3 py-2 rounded-md hover:bg-white/5 hover:text-primary">DOCUMENTS</a>
+                <a href="#ACCESS_LOG" class="block px-3 py-2 rounded-md hover:bg-white/5 hover:text-primary">ACCESS_LOG</a>
+                <a href="#ENCRYPT" class="block px-3 py-2 rounded-md hover:bg-white/5 text-secondary">ENCRYPT TOOL</a>
             </div>
-        </section>
-    </main>
+        </div>
+    </nav>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <a href="#home">Zen Neo</a>
-                    <p>Cybersecurity Specialist & Bug Bounty Hunter</p>
+    <!-- 4. STATUS SECTION (HERO) -->
+    <section id="STATUS" class="pt-32 pb-20 px-4 relative overflow-hidden min-h-screen flex items-center">
+        <!-- Background Glow -->
+        <div class="absolute top-0 right-0 w-1/2 h-1/2 bg-primary/10 blur-[100px] rounded-full -z-10"></div>
+        <div class="absolute bottom-0 left-0 w-1/2 h-1/2 bg-secondary/5 blur-[100px] rounded-full -z-10"></div>
+
+        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center w-full">
+            <!-- Left Content -->
+            <div class="space-y-6 z-10">
+                <div class="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-mono tracking-wider">
+                    <span class="w-2 h-2 rounded-full bg-primary mr-2 animate-pulse"></span>
+                    STATUS: ONLINE
                 </div>
-                <div class="footer-links">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="#about">About</a></li>
-                        <li><a href="#skills">Skills</a></li>
-                        <li><a href="#achievements">Achievements</a></li>
-                        <li><a href="#reports" >Reports</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                    </ul>
+                <h1 class="text-5xl md:text-7xl font-bold leading-tight text-white">
+                    Asanul Hoque <br />
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Esan</span>
+                </h1>
+                <div class="h-8 text-xl md:text-2xl font-mono text-textMuted">
+                    &gt; <span id="typing-text" class="typing-cursor"></span>
                 </div>
-                <div class="footer-services">
-                    <h4>Services</h4>
-                    <ul>
-                        <li><a href="#">Penetration Testing</a></li>
-                        <li><a href="#">Vulnerability Assessment</a></li>
-                        <li><a href="#">Security Consulting</a></li>
-                        <li><a href="#">Bug Bounty Hunting</a></li>
-                        <li><a href="#">Security Training</a></li>
-                    </ul>
-                </div>
-                <div class="footer-newsletter">
-                    <h4>Security Newsletter</h4>
-                    <p>Subscribe to get the latest security tips and vulnerabilities</p>
-                    <form class="newsletter-form">
-                        <input type="email" placeholder="Your Email">
-                        <button type="submit"><i class="fas fa-paper-plane"></i></button>
-                    </form>
+                <p class="text-lg text-textMuted max-w-lg leading-relaxed">
+                    Securing digital infrastructures through advanced penetration testing, ethical hacking, and strategic vulnerability assessment.
+                </p>
+                <div class="flex flex-wrap gap-4 pt-4">
+                    <a href="#ENCRYPT" class="btn-gradient px-8 py-3 text-white rounded-lg font-bold transition-all text-center">
+                        Initiate Contact
+                    </a>
+                    <a href="#DOCUMENTS" class="px-8 py-3 border border-white/20 text-white rounded-lg font-bold hover:bg-white/5 transition-all text-center">
+                        View Reports
+                    </a>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <div class="copyright">
-                    <p>&copy; <span id="year"></span> Asanul Hoque Esan (Zen Neo). All Rights Reserved.</p>
+
+            <!-- Right Content (Image) -->
+            <div class="relative z-10 flex justify-center">
+                <div class="relative w-80 md:w-96 aspect-[3/4] rounded-2xl overflow-hidden border border-white/10 group shadow-2xl">
+                    <div class="absolute inset-0 bg-gradient-to-b from-transparent to-bg/90 z-10"></div>
+                    <!-- PLACEHOLDER IMAGE - Replace src with your actual image -->
+                    <img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+                         alt="Asanul Hoque Esan" 
+                         onerror="this.src='https://placehold.co/400x600/111827/E8EEF3?text=A.H.E.'"
+                         class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                    
+                    <div class="absolute bottom-0 left-0 w-full p-6 z-30">
+                        <div class="flex items-center justify-between border-t border-white/20 pt-4">
+                            <span class="text-xs font-mono text-primary">ID: NULLLYNX</span>
+                            <i data-lucide="shield-check" class="text-secondary w-4 h-4"></i>
+                        </div>
+                    </div>
                 </div>
-                <div class="footer-social">
-                    <a href="https://www.facebook.com/ah.esan.90"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-x"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-telegram-plane"></i></a>
-                    <a href="#"><i class="fab fa-threads"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. PROFILE SECTION -->
+    <section id="PROFILE" class="py-24 bg-card/50 border-y border-white/5">
+        <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-12 gap-12 items-center">
+            <!-- Left: Bio -->
+            <div class="md:col-span-7">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6 text-white"><span class="text-primary">//</span> PROFILE</h2>
+                <div class="space-y-4 text-textMuted text-lg leading-relaxed">
+                    <p>
+                        Highly-motivated Cybersecurity Analyst with 3+ years of experience in offensive security, vulnerability assessment, and web application penetration testing.
+                    </p>
+                    <p>
+                        My approach combines deep technical expertise with a creative, hacker-centric mindset to identify and mitigate critical vulnerabilities before they can be exploited by malicious actors.
+                    </p>
+                    <p>
+                        I am passionate about building secure systems and thrive in fast-paced environments, constantly adapting to the evolving threat landscape.
+                    </p>
                 </div>
+                 <!-- MODIFIED: Added button group and new "Read Full Bio" button -->
+                 <div class="flex flex-wrap gap-4 mt-8">
+                    <a href="#DOCUMENTS" class="inline-flex items-center gap-2 px-6 py-3 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 transition-all font-bold">
+                        <i data-lucide="download" class="w-4 h-4"></i> Download Resume
+                    </a>
+                    <button data-modal-target="about-me-full" class="inline-flex items-center gap-2 px-6 py-3 btn-gradient text-white rounded-lg font-bold transition-all">
+                        <i data-lucide="user" class="w-4 h-4"></i> Read Full Bio
+                    </button>
+                 </div>
+                 <!-- END MODIFICATION -->
+            </div>
+            <!-- Right: Stats -->
+            <div class="md:col-span-5 flex flex-col gap-6">
+                <div class="text-center p-6 bg-bg border border-white/5 rounded-xl shadow-lg">
+                    <h3 class="text-5xl font-bold text-white" id="count-vuln">0+</h3>
+                    <p class="text-sm text-primary font-mono mt-2">CRITICAL VULNERABILITIES FOUND</p>
+                </div>
+                <div class="text-center p-6 bg-bg border border-white/5 rounded-xl shadow-lg">
+                    <h3 class="text-5xl font-bold text-white" id="count-client">0+</h3>
+                    <p class="text-sm text-primary font-mono mt-2">CLIENTS & PROJECTS</p>
+                </div>
+                <div class="text-center p-6 bg-bg border border-white/5 rounded-xl shadow-lg">
+                    <h3 class="text-5xl font-bold text-white" id="count-rate">0%</h3>
+                    <p class="text-sm text-primary font-mono mt-2">SUCCESS RATE</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. ANALYSIS & EXPERTISE (MARQUEE) -->
+    <section id="ANALYSIS" class="py-24 overflow-hidden">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-white"><span class="text-secondary">//</span> ANALYSIS & EXPERTISE</h2>
+            <p class="text-textMuted uppercase tracking-widest text-sm mt-2">TOOLS / VULNERABILITIES / AREAS</p>
+        </div>
+
+        <!-- Row 1: Tools (Right to Left) -->
+        <div class="mb-12">
+            <p class="max-w-7xl mx-auto px-4 mb-2 text-sm font-mono text-secondary">TOOLS_I_KNOW</p>
+            <div class="marquee-container relative w-full overflow-hidden py-4 bg-white/5 border-y border-white/5">
+                <div class="marquee-content flex gap-4 w-max animate-scroll-left pl-4" id="tools-marquee">
+                    <!-- JS will inject items here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 2: Vulns (Left to Right) -->
+        <div class="mb-12">
+            <p class="max-w-7xl mx-auto px-4 mb-2 text-sm font-mono text-primary text-right">KNOWN_VULNERABILITIES</p>
+            <div class="marquee-container relative w-full overflow-hidden py-4 bg-white/5 border-y border-white/5">
+                <div class="marquee-content flex gap-4 w-max animate-scroll-right pl-4" id="vuln-marquee">
+                    <!-- JS will inject items here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 3: Expertise (Grid Layout) -->
+        <div>
+            <p class="max-w-7xl mx-auto px-4 mb-4 text-sm font-mono text-secondary">KEY EXPERTISE AREAS</p>
+            <div id="expertise-grid" class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- JS will inject expertise cards here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. PLATFORM ACCOMPLISHMENTS -->
+    <section id="ACCOMPLISH" class="py-24 bg-card/30 border-y border-white/5">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold mb-16 text-center text-white"><span class="text-primary">//</span> PLATFORM ACCOMPLISHMENTS</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-6 items-center" id="platforms-grid">
+                <!-- Platform cards will be dynamically checked or modified by JS for clicks -->
+                <!-- Card 1 -->
+                <a data-modal-target="platform-hackerone" class="p-6 bg-bg border border-white/10 rounded-xl text-center hover:border-primary/50 hover:-translate-y-2 transition-all duration-300 shadow-lg h-full cursor-pointer">
+                    <i data-lucide="shield" class="w-10 h-10 text-primary mx-auto mb-4"></i>
+                    <h3 class="font-bold text-white text-lg">HackerOne</h3>
+                    <p class="text-secondary text-sm font-mono mt-1">Top 1%</p>
+                </a>
+                <!-- Card 2 -->
+                 <a data-modal-target="platform-bugcrowd" class="p-6 bg-bg border border-white/10 rounded-xl text-center hover:border-primary/50 hover:-translate-y-2 transition-all duration-300 shadow-lg h-full cursor-pointer">
+                    <i data-lucide="bug" class="w-10 h-10 text-primary mx-auto mb-4"></i>
+                    <h3 class="font-bold text-white text-lg">Bugcrowd</h3>
+                    <p class="text-secondary text-sm font-mono mt-1">Top 50</p>
+                </a>
+                <!-- Card 3 (Center Big) -->
+                 <a data-modal-target="platform-htb" class="p-8 bg-bg border border-primary/50 shadow-[0_0_40px_rgba(0,194,255,0.2)] rounded-xl text-center transform md:scale-110 z-10 hover:-translate-y-2 transition-all duration-300 h-full cursor-pointer">
+                    <i data-lucide="cpu" class="w-12 h-12 text-primary mx-auto mb-4"></i>
+                    <h3 class="font-bold text-white text-xl">HackTheBox</h3>
+                    <p class="text-secondary font-mono text-lg mt-1">PRO HACKER</p>
+                    <p class="text-xs text-textMuted mt-2">Rank: Guru</p>
+                </a>
+                <!-- Card 4 -->
+                 <a data-modal-target="platform-thm" class="p-6 bg-bg border border-white/10 rounded-xl text-center hover:border-primary/50 hover:-translate-y-2 transition-all duration-300 shadow-lg h-full cursor-pointer">
+                    <i data-lucide="terminal-square" class="w-10 h-10 text-primary mx-auto mb-4"></i>
+                    <h3 class="font-bold text-white text-lg">TryHackMe</h3>
+                    <p class="text-secondary text-sm font-mono mt-1">Top 1%</p>
+                </a>
+                <!-- Card 5 -->
+                 <a data-modal-target="platform-portswigger" class="p-6 bg-bg border border-white/10 rounded-xl text-center hover:border-primary/50 hover:-translate-y-2 transition-all duration-300 shadow-lg h-full cursor-pointer">
+                    <i data-lucide="database" class="w-10 h-10 text-primary mx-auto mb-4"></i>
+                    <h3 class="font-bold text-white text-lg">PortSwigger</h3>
+                    <p class="text-secondary text-sm font-mono mt-1">Certified</p>
+                </a>
+            </div>
+
+            <!-- Container for dynamically loaded platforms -->
+            <div id="more-platforms-grid" class="hidden grid grid-cols-1 md:grid-cols-5 gap-6 items-center mt-6">
+                <!-- JS will inject more platforms here -->
+            </div>
+
+            <div class="text-center mt-12">
+                 <button id="platform-toggle-btn" data-state="more" class="text-sm font-mono text-textMuted hover:text-white underline decoration-primary/50 underline-offset-4">
+                    See More (45+)
+                 </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. DOCUMENTS & REPORTS -->
+    <section id="DOCUMENTS" class="py-24">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold mb-16 text-center text-white"><span class="text-secondary">//</span> DOCUMENTS & REPORTS</h2>
+            
+            <!-- Certifications -->
+            <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+              <i data-lucide="award" class="text-secondary"></i> TOP CERTIFICATIONS
+            </h3>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-12 group/grid">
+                <!-- Cert 1 -->
+                <div data-modal-target="cert-oscp" class="p-6 rounded-lg border border-white/10 bg-card transition-all duration-300 group-hover/grid:blur-[1px] hover:!blur-none hover:!scale-105 hover:border-secondary/50 cursor-pointer shadow-lg">
+                    <i data-lucide="award" class="text-secondary mb-3 w-8 h-8"></i>
+                    <h3 class="font-bold text-white text-sm">OSCP</h3>
+                    <p class="text-xs text-textMuted mt-1">Offensive Security</p>
+                </div>
+                <!-- Cert 2 -->
+                <div data-modal-target="cert-ceh" class="p-6 rounded-lg border border-white/10 bg-card transition-all duration-300 group-hover/grid:blur-[1px] hover:!blur-none hover:!scale-105 hover:border-secondary/50 cursor-pointer shadow-lg">
+                    <i data-lucide="award" class="text-secondary mb-3 w-8 h-8"></i>
+                    <h3 class="font-bold text-white text-sm">CEH (Practical)</h3>
+                    <p class="text-xs text-textMuted mt-1">EC-Council</p>
+                </div>
+                <!-- Cert 3 -->
+                <div data-modal-target="cert-ejpt" class="p-6 rounded-lg border border-white/10 bg-card transition-all duration-300 group-hover/grid:blur-[1px] hover:!blur-none hover:!scale-105 hover:border-secondary/50 cursor-pointer shadow-lg">
+                    <i data-lucide="award" class="text-secondary mb-3 w-8 h-8"></i>
+                    <h3 class="font-bold text-white text-sm">eJPT</h3>
+                    <p class="text-xs text-textMuted mt-1">eLearnSecurity</p>
+                </div>
+                <!-- Cert 4 -->
+                <div data-modal-target="cert-secplus" class="p-6 rounded-lg border border-white/10 bg-card transition-all duration-300 group-hover/grid:blur-[1px] hover:!blur-none hover:!scale-105 hover:border-secondary/50 cursor-pointer shadow-lg">
+                    <i data-lucide="award" class="text-secondary mb-3 w-8 h-8"></i>
+                    <h3 class="font-bold text-white text-sm">Security+</h3>
+                    <p class="text-xs text-textMuted mt-1">CompTIA</p>
+                </div>
+                <!-- Cert 5 (See More) -->
+                <div id="see-all-certs-btn" class="p-6 rounded-lg border border-dashed border-white/20 bg-card/50 text-textMuted transition-all duration-300 hover:border-secondary hover:text-secondary cursor-pointer flex flex-col items-center justify-center text-center">
+                    <i data-lucide="plus-circle" class="w-8 h-8 mb-2"></i>
+                    <h3 class="font-bold text-sm">See More</h3>
+                    <p class="text-xs mt-1">(40+)</p>
+                </div>
+            </div>
+
+            <!-- Reports -->
+            <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2 border-t border-white/10 pt-12">
+              <i data-lucide="file-text" class="text-primary"></i> VULNERABILITY REPORTS
+            </h3>
+            <div class="marquee-container relative w-full overflow-hidden py-4 bg-white/5 border-y border-white/5">
+                <div class="marquee-content flex gap-4 w-max animate-scroll-left pl-4" id="reports-marquee">
+                    <!-- JS will inject items here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 9. ACCESS LOG (TABLE) -->
+    <section id="ACCESS_LOG" class="py-24 bg-card/30 border-y border-white/5">
+        <div class="max-w-5xl mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center text-white"><span class="text-primary">//</span> ACCESS LOG</h2>
+            
+            <div class="overflow-hidden rounded-xl border border-white/10 bg-bg shadow-2xl">
+                <table class="w-full text-left text-sm text-textMuted">
+                    <thead class="bg-card text-xs uppercase font-mono text-primary">
+                        <tr>
+                            <th class="px-6 py-4">Timestamp</th>
+                            <th class="px-6 py-4">Action</th>
+                            <th class="px-6 py-4 hidden sm:table-cell">Target/Ref</th>
+                            <th class="px-6 py-4 text-right">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/5 font-mono">
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-6 py-4">2025-11-17 10:30</td>
+                            <td class="px-6 py-4 text-white">Vulnerability Found</td>
+                            <td class="px-6 py-4 hidden sm:table-cell">Client A [Banking]</td>
+                            <td class="px-6 py-4 text-right"><span class="px-2 py-1 bg-red-500/20 text-red-400 rounded text-xs">CRITICAL</span></td>
+                        </tr>
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-6 py-4">2025-11-16 14:20</td>
+                            <td class="px-6 py-4 text-white">CTF Completed</td>
+                            <td class="px-6 py-4 hidden sm:table-cell">HackTheBox (Insane)</td>
+                            <td class="px-6 py-4 text-right"><span class="px-2 py-1 bg-green-500/20 text-green-400 rounded text-xs">SOLVED</span></td>
+                        </tr>
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-6 py-4">2025-11-15 09:00</td>
+                            <td class="px-6 py-4 text-white">System Audit</td>
+                            <td class="px-6 py-4 hidden sm:table-cell">Internal Network</td>
+                            <td class="px-6 py-4 text-right"><span class="px-2 py-1 bg-primary/20 text-primary rounded text-xs">SECURE</span></td>
+                        </tr>
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-6 py-4">2025-11-14 18:45</td>
+                            <td class="px-6 py-4 text-white">Report Submitted</td>
+                            <td class="px-6 py-4 hidden sm:table-cell">HackerOne</td>
+                            <td class="px-6 py-4 text-right"><span class="px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded text-xs">TRIAGED</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="text-center mt-8">
+                 <button id="see-all-logs-btn" class="text-sm font-mono text-textMuted hover:text-white underline decoration-primary/50 underline-offset-4">
+                    See All Activity (100+)
+                 </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 10. ENCRYPTION TOOL -->
+    <section id="ENCRYPT" class="py-24">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="mb-12 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-white"><span class="text-primary">//</span> ENCRYPT / DECRYPT</h2>
+                <p class="text-textMuted uppercase tracking-widest text-sm mt-2">SECURE TOOLS SUITE</p>
+            </div>
+
+            <div class="grid md:grid-cols-12 gap-8 bg-card rounded-2xl border border-white/10 overflow-hidden shadow-2xl">
+                <!-- Sidebar -->
+                <div class="md:col-span-3 bg-bg border-r border-white/10 p-4 max-h-[500px] overflow-y-auto" id="algo-list">
+                    <h3 class="text-textMuted text-xs font-mono uppercase mb-4 pl-2">Algorithms (20)</h3>
+                    <!-- JS will inject algo buttons here -->
+                </div>
+
+                <!-- Tool -->
+                <div class="md:col-span-9 p-8">
+                    <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-6 gap-4">
+                        <h3 class="text-2xl font-bold text-white flex items-center gap-3">
+                            <i data-lucide="lock" class="text-secondary w-6 h-6"></i> <span id="current-algo-name">Base64</span> Processor
+                        </h3>
+                        <div class="flex gap-2 text-xs font-mono text-textMuted">
+                            <span class="px-2 py-1 border border-white/10 rounded">KEY: AES-256</span>
+                            <span class="px-2 py-1 border border-white/10 rounded">MODE: GCM</span>
+                        </div>
+                    </div>
+
+                    <div class="grid gap-6">
+                        <div>
+                            <label for="crypto-input" class="text-sm text-textMuted uppercase tracking-wider">Input Payload</label>
+                            <textarea id="crypto-input" class="w-full h-32 bg-bg border border-white/10 rounded-lg p-4 text-white font-mono focus:border-primary outline-none mt-2 transition-colors" placeholder="Enter text to process..."></textarea>
+                        </div>
+
+                        <div class="flex justify-center gap-4">
+                            <button onclick="processCrypto(false)" class="px-8 py-3 btn-gradient text-white font-bold rounded-lg transition-all flex items-center gap-2">
+                                <i data-lucide="lock" class="w-4 h-4"></i> ENCRYPT
+                            </button>
+                            <button onclick="processCrypto(true)" class="px-8 py-3 bg-white/10 border border-white/20 text-white font-bold rounded-lg hover:bg-white/20 transition-all flex items-center gap-2">
+                                <i data-lucide="unlock" class="w-4 h-4"></i> DECRYPT
+                            </button>
+                        </div>
+
+                        <div>
+                            <label for="crypto-output" class="text-sm text-textMuted uppercase tracking-wider flex justify-between">
+                                <span>Output Result</span>
+                                <span class="text-xs text-green-400 hidden" id="success-msg">STATUS: SUCCESS</span>
+                            </label>
+                            <div class="relative mt-2">
+                                <textarea id="crypto-output" readonly class="w-full h-32 bg-bg border border-white/10 rounded-lg p-4 text-secondary font-mono outline-none" placeholder="Output will appear here..."></textarea>
+                                <button onclick="copyOutput()" class="absolute top-4 right-4 p-2 bg-card border border-white/10 rounded hover:bg-white/20 text-white transition-colors" title="Copy Output">
+                                    <i data-lucide="copy" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 11. FOOTER -->
+    <footer class="bg-[#05080f] border-t border-white/5 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid md:grid-cols-3 gap-12 mb-12">
+                <!-- Left: Brand & Socials -->
+                <div class="md:col-span-1">
+                    <div class="flex items-center gap-2 mb-4">
+                        <i data-lucide="terminal" class="text-primary w-8 h-8"></i>
+                        <span class="font-bold text-3xl tracking-tighter text-white">null<span class="text-primary">lynx</span></span>
+                    </div>
+                    <p class="text-textMuted max-w-md mb-6">
+                        Professional cybersecurity services, vulnerability assessment, and ethical hacking solutions.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="p-3 bg-card rounded-lg text-textMuted hover:bg-primary hover:text-white transition-all"><i data-lucide="github" class="w-5 h-5"></i></a>
+                        <a href="#" class="p-3 bg-card rounded-lg text-textMuted hover:bg-primary hover:text-white transition-all"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                        <a href="#" class="p-3 bg-card rounded-lg text-textMuted hover:bg-primary hover:text-white transition-all"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                        <a href="#" class="p-3 bg-card rounded-lg text-textMuted hover:bg-primary hover:text-white transition-all"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                        <a href="#" class="p-3 bg-card rounded-lg text-textMuted hover:bg-primary hover:text-white transition-all"><i data-lucide="youtube" class="w-5 h-5"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Right: Contact -->
+                <div class="md:col-span-2">
+                    <h4 class="text-white font-bold text-lg mb-4">CONTACT / ACCESS</h4>
+                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                        <ul class="space-y-3 text-textMuted font-mono text-sm">
+                            <li class="flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-primary"></i> contact@asanul.com</li>
+                            <li class="flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-primary"></i> security@asanul.com</li>
+                            <li class="flex items-center gap-2"><i data-lucide="phone" class="w-4 h-4 text-primary"></i> +880 1XXX-XXXXXX (WhatsApp)</li>
+                        </ul>
+                         <ul class="space-y-3 text-textMuted font-mono text-sm">
+                            <li class="flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4 text-secondary"></i> Dhaka, Bangladesh</li>
+                            <li class="flex items-center gap-2"><i data-lucide="clock" class="w-4 h-4 text-secondary"></i> GMT +6 (Available 9 AM - 6 PM)</li>
+                            <li class="flex items-center gap-2"><i data-lucide="key" class="w-4 h-4 text-secondary"></i> PGP KEY: 0x4A1B...9F</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/5 pt-8 text-center">
+                <p class="text-[#565d6d] text-xs font-mono">
+                    © <span id="current-year">2025</span> ASANUL HOQUE ESAN. ALL RIGHTS RESERVED.
+                </body
             </div>
         </div>
     </footer>
 
-    <!-- Back to Top Button -->
-    <a href="#home" class="back-to-top">
-        <i class="fas fa-arrow-up"></i>
-    </a>
+    <!-- 12. MODAL STRUCTURE -->
+    <div id="modal-container" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+        <!-- Overlay -->
+        <div id="modal-overlay" class="modal-overlay fixed inset-0"></div>
+        
+        <!-- Modal Panel -->
+        <div id="modal-panel" class="relative z-10 w-full max-w-xl bg-card border border-white/10 rounded-2xl shadow-2xl overflow-hidden transform transition-all">
+            <!-- Header -->
+            <div class="flex items-center justify-between p-6 border-b border-white/10">
+                <h3 id="modal-title" class="text-2xl font-bold text-white">Modal Title</h3>
+                <button id="modal-close-btn" class="text-textMuted hover:text-white">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            
+            <!-- Content -->
+            <div id="modal-content" class="p-6 max-h-[60vh] overflow-y-auto text-textMuted space-y-4">
+                <!-- Content injected by JS -->
+                <p>This is the modal content.</p>
+            </div>
+            
+            <!-- Footer (for links or pagination) -->
+            <div id="modal-footer" class="p-6 bg-bg border-t border-white/10 flex justify-between items-center">
+                <a id="modal-link" href="#" target="_blank" class="hidden btn-gradient px-6 py-2 text-white rounded-lg font-bold text-sm transition-all">
+                    Learn More
+                </a>
+                <!-- Pagination for Logs -->
+                <div id="modal-pagination" class="hidden w-full flex justify-between items-center text-sm font-mono">
+                    <button id="log-prev-btn" class="px-4 py-2 bg-white/10 border border-white/20 rounded hover:bg-white/20 transition-all">Previous</button>
+                    <span id="log-page-info">Page 1 of 10</span>
+                    <button id="log-next-btn" class="px-4 py-2 bg-white/10 border border-white/20 rounded hover:bg-white/20 transition-all">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-    <script src="assets/js/script.js"></script>
-    <script src="assets/js/particles.js"></script>
+    <!-- 13. JAVASCRIPT LOGIC -->
+    <script>
+        // --- 0. DEBOUNCE UTILITY ---
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                const context = this;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(context, args), wait);
+            };
+        }
+
+        // --- 1. ICONS ---
+        lucide.createIcons();
+        document.getElementById('current-year').innerText = new Date().getFullYear();
+
+        // --- 2. MOBILE MENU ---
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIconOpen = document.getElementById('menu-icon-open');
+        const menuIconClose = document.getElementById('menu-icon-close');
+        
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            menuIconOpen.classList.toggle('hidden');
+            menuIconClose.classList.toggle('hidden');
+        });
+
+        // Close menu on link click
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                menuIconOpen.classList.remove('hidden');
+                menuIconClose.classList.add('hidden');
+            });
+        });
+
+        // --- 2.5 NAV SCROLLSPY (Active Underline) ---
+        const navLinks = document.querySelectorAll('#desktop-nav-links a.nav-link');
+        const sections = document.querySelectorAll('section[id]');
+
+        const observerOptions = {
+            root: null, // viewport
+            rootMargin: '-50% 0px -50% 0px', // Trigger when section is at the vertical center
+            threshold: 0 // As soon as it hits the center line
+        };
+
+        const observerCallback = (entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    const activeLink = document.querySelector(`#desktop-nav-links a[href="#${id}"]`);
+                    
+                    navLinks.forEach(link => link.classList.remove('nav-active'));
+                    
+                    if (activeLink) {
+                        activeLink.classList.add('nav-active');
+                    }
+                }
+            });
+        };
+
+        const scrollObserver = new IntersectionObserver(observerCallback, observerOptions);
+        sections.forEach(section => scrollObserver.observe(section));
+
+        // Set initial active link
+        // Use a slight delay to ensure correct positioning on load
+        setTimeout(() => {
+             const initialActiveLink = document.querySelector('#desktop-nav-links a[href="#STATUS"]');
+             if (initialActiveLink) {
+                initialActiveLink.classList.add('nav-active');
+             }
+        }, 100);
+
+
+        // --- 3. TYPING EFFECT ---
+        const typingRoles = ["Hacker", "Bug Bounty Hunter", "CTF Player", "Pentester", "Security Researcher", "Critical Thinker"];
+        let roleIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const typingElement = document.getElementById('typing-text');
+
+        function type() {
+            if (!typingElement) return;
+            const currentRole = typingRoles[roleIndex];
+            let typeSpeed = isDeleting ? 50 : 100;
+            
+            if (isDeleting) {
+                typingElement.textContent = currentRole.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typingElement.textContent = currentRole.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            if (!isDeleting && charIndex === currentRole.length) {
+                isDeleting = true;
+                typeSpeed = 2000; // Pause at end
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                roleIndex = (roleIndex + 1) % typingRoles.length;
+                typeSpeed = 500; // Pause before new word
+            }
+            
+            setTimeout(type, typeSpeed);
+        }
+        type();
+
+        // --- 4. STATS COUNTER ---
+        function animateValue(obj, start, end, duration, suffix = '') {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const value = Math.floor(progress * (end - start) + start);
+                obj.innerHTML = value + suffix;
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        // Intersection Observer to trigger count-up
+        const profileSection = document.getElementById('PROFILE');
+        let statsAnimated = false;
+        const statsObserver = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && !statsAnimated) {
+                animateValue(document.getElementById('count-vuln'), 0, 150, 2000, '+');
+                animateValue(document.getElementById('count-client'), 0, 40, 2000, '+');
+                animateValue(document.getElementById('count-rate'), 0, 99, 2000, '%');
+                statsAnimated = true;
+                statsObserver.disconnect();
+            }
+        }, { threshold: 0.5 });
+        
+        if (profileSection) {
+            statsObserver.observe(profileSection);
+        }
+
+        // --- 5. MODAL DATA STORE ---
+        const modalDetails = {
+            // --- NEW: Full About Me Content ---
+            "about-me-full": { 
+                title: "About Asanul Hoque Esan", 
+                content: `
+                    <div class='space-y-4 text-textMain/90'>
+                        <p class='text-lg'>Hello! I'm Asanul Hoque Esan, a dedicated cybersecurity professional driven by a deep-seated passion for digital defense. My journey into technology wasn't just a career choice; it was a calling.</p>
+                        
+                        <h4 class='text-xl font-bold text-secondary pt-2'>My Philosophy</h4>
+                        <p>I operate on a simple philosophy: "Think like an adversary, defend as a guardian." This dual perspective allows me to anticipate threats and build resilient systems. I don't just look for vulnerabilities; I seek to understand the "why" behind them—the design flaw, the human error, the business pressure—to provide holistic and sustainable security solutions.</p>
+                        
+                        <h4 class='text-xl font-bold text-secondary pt-2'>What I Do</h4>
+                        <p>My expertise spans the full spectrum of offensive security. On any given day, you might find me:</p>
+                        <ul class='list-disc list-inside pl-4 text-textMuted'>
+                            <li>Reverse-engineering malware to understand its payload and C2 infrastructure.</li>
+                            <li>Simulating multi-stage attacks (Red Teaming) to test an organization's detection and response.</li>
+                            <li>Auditing cloud infrastructure on AWS and Azure for IAM misconfigurations and insecure services.</li>
+                            <li>Performing deep-dive web application tests, hunting for everything from simple XSS to complex business logic flaws.</li>
+                        </ul>
+                        
+                        <h4 class='text-xl font-bold text-secondary pt-2'>Beyond the Terminal</h4>
+                        <p>When I'm not in front of a screen, I'm an active member of the cybersecurity community. I believe in the power of shared knowledge, which is why I frequently contribute to open-source projects, write blog posts on new attack vectors, and mentor aspiring security professionals.</p>
+                        <p>I'm also an avid CTF player (you'll find me on HackTheBox and TryHackMe) and a lifelong learner. The threat landscape never sleeps, and neither does my desire to learn and adapt.</p>
+                        
+                        <h4 class='text-xl font-bold text-secondary pt-2'>Let's Connect</h4>
+                        <p>I'm always open to discussing new challenges, collaborating on projects, or simply talking about the latest trends in security. Feel free to reach out via LinkedIn.</p>
+                    </div>
+                `, 
+                link: "https://www.linkedin.com/in/asanul-h-esan" // Example link
+            },
+            // --- End new content ---
+
+            // Tools
+            "tool-burp": { title: "Burp Suite", content: "The industry-standard tool for web application security testing. Used for mapping, scanning, and exploiting vulnerabilities.", link: "https://portswigger.net/burp" },
+            "tool-nmap": { title: "Nmap", content: "Network Mapper is a free and open-source utility for network discovery and security auditing.", link: "https://nmap.org" },
+            "tool-metasploit": { title: "Metasploit", content: "A powerful penetration testing framework that makes hacking simple. Used for developing and executing exploit code.", link: "https://www.metasploit.com/" },
+            "tool-wireshark": { title: "Wireshark", content: "The world's foremost network protocol analyzer. It lets you see what's happening on your network at a microscopic level.", link: "https://www.wireshark.org/" },
+            "tool-jtr": { title: "John the Ripper", content: "A fast password cracker, currently available for many flavors of Unix, Windows, DOS, and OpenVMS.", link: "https://www.openwall.com/john/" },
+            "tool-hashcat": { title: "Hashcat", content: "The world's fastest and most advanced password recovery utility.", link: "https://hashcat.net/hashcat/" },
+            "tool-ghidra": { title: "Ghidra", content: "A software reverse engineering (SRE) framework developed by the NSA's Research Directorate.", link: "https://ghidra-sre.org/" },
+            "tool-sqlmap": { title: "SQLMap", content: "An open source penetration testing tool that automates the process of detecting and exploiting SQL injection flaws.", link: "https://sqlmap.org/" },
+            "tool-aircrack": { title: "Aircrack-ng", content: "A complete suite of tools to assess WiFi network security.", link: "https://www.aircrack-ng.org/" },
+            "tool-nessus": { title: "Nessus", content: "A proprietary vulnerability scanner developed by Tenable, Inc.", link: "https://www.tenable.com/products/nessus" },
+            "tool-zap": { title: "OWASP ZAP", content: "The Zed Attack Proxy (ZAP) is an easy-to-use integrated penetration testing tool for finding vulnerabilities in web applications.", link: "https://www.zaproxy.org/" },
+            "tool-netcat": { title: "Netcat", content: "A networking utility for reading from and writing to network connections using TCP or UDP.", link: "https://nmap.org/ncat/" },
+            "tool-gobuster": { title: "Gobuster", content: "A tool used to brute-force URIs (directories and files), DNS subdomains, and virtual host names.", link: "https://github.com/OJ/gobuster" },
+            "tool-hydra": { title: "Hydra", content: "A parallelized network logon cracker which supports numerous protocols to attack.", link: "https://github.com/vanhauser-thc/thc-hydra" },
+            
+            // Vulnerabilities
+            "vuln-sql": { title: "SQL Injection (SQLi)", content: "A web security vulnerability that allows an attacker to interfere with the queries that an application makes to its database.", link: "https://portswigger.net/web-security/sql-injection" },
+            "vuln-xss": { title: "Cross-Site Scripting (XSS)", content: "A vulnerability that allows attackers to inject client-side scripts into web pages viewed by other users.", link: "https://owasp.org/www-community/attacks/Cross_Site_Scripting_(XSS)" },
+            "vuln-rce": { title: "Remote Code Execution (RCE)", content: "A critical vulnerability that allows an attacker to execute arbitrary commands on the target server.", link: "https://owasp.org/www-project-top-ten/2017/A1_2017-Injection" },
+            "vuln-csrf": { title: "Cross-Site Request Forgery (CSRF)", content: "An attack that forces an end user to execute unwanted actions on a web application in which they're currently authenticated.", link: "https://portswigger.net/web-security/csrf" },
+            "vuln-ssrf": { title: "Server-Side Request Forgery (SSRF)", content: "A vulnerability that allows an attacker to induce the server-side application to make requests to an unintended location.", link: "https://portswigger.net/web-security/ssrf" },
+            "vuln-lfi": { title: "LFI/RFI", content: "Local File Inclusion (LFI) and Remote File Inclusion (RFI) allow an attacker to include files on a server through the web browser.", link: "https://owasp.org/www-project-top-ten/2017/A1_2017-Injection" },
+            "vuln-path": { title: "Path Traversal", content: "Allows an attacker to access files and directories stored outside the web root folder by manipulating variables with 'dot-dot-slash' sequences.", link: "https://portswigger.net/web-security/file-path-traversal" },
+            "vuln-deserial": { title: "Insecure Deserialization", content: "Leads to remote code execution when an application deserializes untrusted data without sufficient validation.", link: "https://owasp.org/www-project-top-ten/2017/A8_2017-Insecure_Deserialization" },
+            "vuln-bac": { title: "Broken Access Control", content: "Occurs when restrictions on what authenticated users are allowed to do are not properly enforced.", link: "https://owasp.org/www-project-top-ten/2021/A01_2021-Broken_Access_Control" },
+            "vuln-idor": { title: "Insecure Direct Object References (IDOR)", content: "A type of access control vulnerability where an application uses user-supplied input to access objects directly.", link: "https://portswigger.net/web-security/access-control/idor" },
+            "vuln-xxe": { title: "XML External Entity (XXE)", content: "A vulnerability that allows an attacker to interfere with an application's processing of XML data.", link: "https://portswigger.net/web-security/xxe" },
+            "vuln-cmd": { title: "Command Injection", content: "Allows attackers to execute arbitrary commands on the host operating system via a vulnerable application.", link: "https://portswigger.net/web-security/command-injection" },
+            "vuln-oast": { title: "Out-of-Band Application Security Testing (OAST)", content: "A technique for finding vulnerabilities using an external service to monitor for resulting network interactions.", link: "https://portswigger.net/burp/oast" },
+
+            // Platforms
+            "platform-hackerone": { title: "HackerOne", content: "Achieved 'Top 1%' rank by consistently reporting high-impact vulnerabilities for multiple enterprise clients.", link: "https://hackerone.com/asanul_h_esan" },
+            "platform-bugcrowd": { title: "Bugcrowd", content: "Ranked in the 'Top 50' globally. Recognized for contributions to various public and private bug bounty programs.", link: "https://bugcrowd.com/asanul_h_esan" },
+            "platform-htb": { title: "HackTheBox", content: "Achieved 'Pro Hacker' and 'Guru' ranks. Regularly solve 'Insane' rated machines and challenges.", link: "https://app.hackthebox.com/profile/12345" },
+            "platform-thm": { title: "TryHackMe", content: "Consistently in the 'Top 1%' of users. Completed over 200 rooms and various learning paths.", link: "https://tryhackme.com/p/asanul" },
+            "platform-portswigger": { title: "PortSwigger", content: "Completed the Web Security Academy and hold the Burp Suite Certified Practitioner (BSCP) certification.", link: "https://portswigger.net/web-security" },
+            "platform-generic": { title: "Platform Details", content: "This is a placeholder for one of the 45 other platforms. The real site would show specific achievements for this platform.", link: "#" },
+
+            // Certifications
+            "cert-oscp": { title: "OSCP - Offensive Security Certified Professional", content: "A rigorous certification that proves hands-on penetration testing skills. Requires compromising a 24-hour exam network.", link: "https://www.offensive-security.com/pwk-oscp/" },
+            "cert-ceh": { title: "CEH (Practical)", content: "A hands-on exam that requires demonstrating skills and techniques in ethical hacking.", link: "https://www.eccouncil.org/train-certify/certified-ethical-hacker-ceh-practical/" },
+            "cert-ejpt": { title: "eJPT - eLearnSecurity Junior Penetration Tester", content: "A 100% practical certification on penetration testing and information security fundamentals.", link: "https://elearnsecurity.com/product/ejpt-certification/" },
+            "cert-secplus": { title: "CompTIA Security+", content: "A global certification that validates the baseline skills necessary to perform core security functions.", link: "https://www.comptia.org/certifications/security" },
+            
+            // Expertise
+            "exp-web": { title: "Web Application Pentesting", content: "Deep expertise in finding and exploiting common (OWASP Top 10) and complex vulnerabilities like SQLi, XSS, RCE, SSRF, and business logic flaws.", link: "https://owasp.org/www-project-top-ten/" },
+            "exp-net": { title: "Network Security", content: "Proficient in network mapping (Nmap), vulnerability scanning (Nessus), and exploiting network-level misconfigurations.", link: "https://www.sans.org/cyber-security-courses/network-penetration-testing-ethical-hacking/" },
+            "exp-cloud": { title: "Cloud Security (AWS/Azure)", content: "Experience in auditing cloud environments, identifying misconfigured S3 buckets, IAM role vulnerabilities, and insecure serverless functions.", link: "https://aws.amazon.com/security/" },
+            "exp-mobile": { title: "Mobile (Android/iOS)", content: "Skilled in mobile application penetration testing, including static/dynamic analysis, reverse engineering, and bypassing SSL pinning.", link: "https://owasp.org/www-project-mobile-top-10/" },
+        };
+
+        // --- 6. MARQUEE INJECTION & CLICK ---
+        const marqueeData = {
+            tools: [
+                { id: "tool-burp", text: "Burp Suite", icon: "bug" }, 
+                { id: "tool-nmap", text: "Nmap", icon: "scan" }, 
+                { id: "tool-metasploit", text: "Metasploit", icon: "rocket" },
+                { id: "tool-wireshark", text: "Wireshark", icon: "wifi" }, 
+                { id: "tool-jtr", text: "John the Ripper", icon: "key" }, 
+                { id: "tool-hashcat", text: "Hashcat", icon: "hash" }, 
+                { id: "tool-ghidra", text: "Ghidra", icon: "cpu" }, 
+                { id: "tool-sqlmap", text: "SQLMap", icon: "database" }, 
+                { id: "tool-aircrack", text: "Aircrack-ng", icon: "antenna" }, 
+                { id: "tool-nessus", text: "Nessus", icon: "shield-alert" }, 
+                { id: "tool-zap", text: "Zap", icon: "zap" }, 
+                { id: "tool-netcat", text: "Netcat", icon: "cat" }, 
+                { id: "tool-gobuster", text: "Gobuster", icon: "search" }, 
+                { id: "tool-hydra", text: "Hydra", icon: "lock" }
+            ],
+            vulns: [
+                { id: "vuln-sql", text: "SQL Injection", icon: "database" }, 
+                { id: "vuln-xss", text: "XSS", icon: "code" }, 
+                { id: "vuln-rce", text: "RCE", icon: "terminal" },
+                { id: "vuln-csrf", text: "CSRF", icon: "refresh-cw" }, 
+                { id: "vuln-ssrf", text: "SSRF", icon: "server" }, 
+                { id: "vuln-lfi", text: "LFI/RFI", icon: "file-input" }, 
+                { id: "vuln-path", text: "Path Traversal", icon: "folder-git-2" }, 
+                { id: "vuln-deserial", text: "Insecure Deserialization", icon: "package" }, 
+                { id: "vuln-bac", text: "Broken Access Control", icon: "user-x" }, 
+                { id: "vuln-idor", text: "IDOR", icon: "user-check" }, 
+                { id: "vuln-xxe", text: "XXE", icon: "file-code" }, 
+                { id: "vuln-cmd", text: "Command Injection", icon: "terminal-square" }, 
+                { id: "vuln-oast", text: "OAST", icon: "radio-receiver" }
+            ],
+            reports: [
+                { id: "report-rce", title: "Critical RCE in [Banking App]", icon: "file-text", content: "Discovered a Remote Code Execution vulnerability... (details)", link: "https://example.com/report/1" },
+                { id: "report-ssrf", title: "SSRF on [Cloud Provider]", icon: "file-text", content: "Found an SSRF vulnerability... (details)", link: "https://example.com/report/2" },
+                { id: "report-auth", title: "Auth Bypass in [E-commerce]", icon: "file-text", content: "Bypassed authentication... (details)", link: "https://example.com/report/3" },
+                { id: "report-idor", title: "IDOR leaking [PII Data]", icon: "file-text", content: "Identified an IDOR... (details)" },
+                { id: "report-sqli", title: "SQLi in [Govt Portal]", icon: "file-text", content: "Exploited an SQL injection... (details)" },
+            ]
+        };
+
+        function createMarqueeItem(item, colorClass) {
+            const div = document.createElement('div');
+            // Add flex, items-center, and gap-2
+            div.className = `marquee-item flex-shrink-0 flex items-center gap-2 px-6 py-3 border border-white/10 rounded-full bg-card text-sm font-mono text-textMain whitespace-nowrap cursor-pointer hover:border-primary`;
+            
+            let innerHTML = '';
+            if (item.icon) {
+                // Use the provided color class
+                innerHTML += `<i data-lucide="${item.icon}" class="w-4 h-4 ${colorClass}"></i>`;
+            }
+            innerHTML += `<span>${item.text || item.title}</span>`;
+            
+            div.innerHTML = innerHTML; // Use innerHTML
+
+            if (item.id && (modalDetails[item.id] || item.content)) {
+                div.setAttribute('data-modal-target', item.id);
+            }
+            return div;
+        }
+
+        function populateMarquee(containerId, data, count = 50, iconColorClass) {
+            const container = document.getElementById(containerId);
+            if (!container) {
+                console.error(`Marquee container with id "${containerId}" not found.`);
+                return; 
+            }
+            container.innerHTML = ''; // Prevent duplication
+            let items = [];
+            for (let i = 0; i < count; i++) {
+                items.push(data[i % data.length]);
+            }
+            
+            [...items, ...items].forEach((item) => {
+                container.appendChild(createMarqueeItem(item, iconColorClass)); // Pass the color class
+            });
+            lucide.createIcons(); // Re-render icons
+        }
+
+        // Call populateMarquee with specific icon colors
+        populateMarquee('tools-marquee', marqueeData.tools, 50, 'text-secondary'); // Tools = secondary color
+        populateMarquee('vuln-marquee', marqueeData.vulns, 50, 'text-primary'); // Vulns = primary color
+        populateMarquee('reports-marquee', marqueeData.reports, 20, 'text-textMuted'); // Reports = muted color
+
+        // --- 7. EXPERTISE GRID INJECTION ---
+        const expertiseGrid = document.getElementById('expertise-grid');
+        const expertiseData = [
+            { id: "exp-web", icon: "globe", title: "Web Pentesting", desc: "OWASP Top 10, logic flaws, API testing." },
+            { id: "exp-net", icon: "network", title: "Network Security", desc: "Internal/External testing, Nmap, Nessus." },
+            { id: "exp-cloud", icon: "cloud", title: "Cloud Security", desc: "AWS, Azure, GCP misconfigurations." },
+            { id: "exp-mobile", icon: "smartphone", title: "Mobile Pentesting", desc: "Android, iOS, static/dynamic analysis." }
+        ];
+
+        if (expertiseGrid) {
+            expertiseData.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "p-6 rounded-lg border border-white/10 bg-card transition-all duration-300 hover:!scale-105 hover:border-secondary/50 cursor-pointer shadow-lg";
+                card.setAttribute('data-modal-target', item.id);
+                card.innerHTML = `
+                    <i data-lucide="${item.icon}" class="text-secondary mb-3 w-8 h-8"></i>
+                    <h3 class="font-bold text-white text-lg">${item.title}</h3>
+                    <p class="text-xs text-textMuted mt-2">${item.desc}</p>
+                `;
+                expertiseGrid.appendChild(card);
+            });
+            lucide.createIcons(); // Render icons for expertise grid
+        }
+
+        // --- 7.5 PLATFORM ACCOMPLISHMENTS LOGIC ---
+        const platformToggleBtn = document.getElementById('platform-toggle-btn');
+        const morePlatformsGrid = document.getElementById('more-platforms-grid');
+
+        if (platformToggleBtn && morePlatformsGrid) {
+            const mockPlatformsData = Array.from({ length: 45 }, (_, i) => ({
+                name: `Other Platform ${i + 1}`,
+                rank: `Rank ${Math.floor(Math.random() * 500) + 1}`,
+                icon: i % 3 === 0 ? 'code' : (i % 3 === 1 ? 'shield-check' : 'server')
+            }));
+
+            let isLoaded = false; // Flag to check if platforms are already loaded
+
+            platformToggleBtn.addEventListener('click', () => {
+                const state = platformToggleBtn.getAttribute('data-state');
+
+                if (state === 'more') {
+                    // Load platforms if not already loaded
+                    if (!isLoaded) {
+                        mockPlatformsData.forEach(platform => {
+                            const card = document.createElement('a');
+                            card.setAttribute('data-modal-target', 'platform-generic');
+                            card.className = "p-6 bg-bg border border-white/10 rounded-xl text-center hover:border-primary/50 hover:-translate-y-2 transition-all duration-300 shadow-lg h-full cursor-pointer";
+                            
+                            card.innerHTML = `
+                                <i data-lucide="${platform.icon}" class="w-10 h-10 text-textMuted mx-auto mb-4"></i>
+                                <h3 class="font-bold text-white text-lg">${platform.name}</h3>
+                                <p class="text-secondary text-sm font-mono mt-1">${platform.rank}</p>
+                            `;
+                            morePlatformsGrid.appendChild(card);
+                        });
+                        // Re-render icons for the new cards
+                        lucide.createIcons();
+                        isLoaded = true; // Set flag to true
+                    }
+                    
+                    // Show the grid
+                    morePlatformsGrid.classList.remove('hidden');
+                    
+                    // Update button
+                    platformToggleBtn.setAttribute('data-state', 'less');
+                    platformToggleBtn.innerText = "See Less";
+
+                } else if (state === 'less') {
+                    // Hide the grid
+                    morePlatformsGrid.classList.add('hidden');
+                    
+                    // Update button
+                    platformToggleBtn.setAttribute('data-state', 'more');
+                    platformToggleBtn.innerText = "See More (45+)";
+                }
+            });
+        }
+
+
+        // --- 8. MODAL LOGIC ---
+        const modalContainer = document.getElementById('modal-container');
+        const modalTitle = document.getElementById('modal-title');
+        const modalContent = document.getElementById('modal-content');
+        const modalLink = document.getElementById('modal-link');
+        const modalPagination = document.getElementById('modal-pagination');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+        const modalOverlay = document.getElementById('modal-overlay');
+
+        function openModal(title, content, link = null) {
+            modalTitle.innerText = title;
+            modalContent.innerHTML = content; // Use innerHTML to allow formatted content
+            modalPagination.classList.add('hidden'); // Hide pagination by default
+
+            if (link) {
+                modalLink.href = link;
+                modalLink.classList.remove('hidden');
+                // MODIFIED: Change text for LinkedIn link
+                if (link.includes('linkedin.com')) {
+                    modalLink.innerHTML = 'View LinkedIn Profile';
+                } else {
+                    modalLink.innerHTML = 'Learn More';
+                }
+            } else {
+                modalLink.classList.add('hidden');
+            }
+            modalContainer.classList.remove('hidden');
+            lucide.createIcons(); // Re-render icons if any in modal
+        }
+
+        function closeModal() {
+            modalContainer.classList.add('hidden');
+            modalContent.innerHTML = ''; // Clear content
+        }
+
+        modalCloseBtn.addEventListener('click', closeModal);
+        modalOverlay.addEventListener('click', closeModal);
+
+        // General click listener for all modal triggers
+        document.body.addEventListener('click', function(e) {
+            const target = e.target.closest('[data-modal-target]');
+            if (target) {
+                const targetId = target.getAttribute('data-modal-target');
+                let details;
+
+                // Check marquee reports data
+                if (targetId.startsWith('report-')) {
+                    const report = marqueeData.reports.find(r => r.id === targetId);
+                    if (report) {
+                        details = { title: report.title, content: `<p>${report.content}</p>`, link: report.link };
+                    }
+                } 
+                // Check main details store
+                else if (modalDetails[targetId]) {
+                    details = modalDetails[targetId];
+                }
+
+                if (details) {
+                    // MODIFIED: Check for "about-me-full" to use innerHTML directly
+                    if (targetId === "about-me-full") {
+                        openModal(details.title, details.content, details.link);
+                    } else {
+                        openModal(details.title, `<p>${details.content}</p>`, details.link);
+                    }
+                }
+            }
+        });
+
+        // --- 9. SPECIAL MODALS (CERTS & LOGS) ---
+        
+        // "See All Certifications" Button
+        const seeAllCertsBtn = document.getElementById('see-all-certs-btn');
+        if (seeAllCertsBtn) {
+            seeAllCertsBtn.addEventListener('click', () => {
+                const allCertsData = [ // Mock data for all certs
+                    { id: "cert-oscp", icon: "award", title: "OSCP", org: "Offensive Security" },
+                    { id: "cert-ceh", icon: "award", title: "CEH (Practical)", org: "EC-Council" },
+                    { id: "cert-ejpt", icon: "award", title: "eJPT", org: "eLearnSecurity" },
+                    { id: "cert-secplus", icon: "award", title: "Security+", org: "CompTIA" },
+                    { id: "cert-gpen", icon: "award", title: "GPEN", org: "GIAC" },
+                    { id: "cert-pnpt", icon: "award", title: "PNPT", org: "TCM Security" },
+                    { id: "cert-cissp", icon: "award", title: "CISSP", org: "ISC²" },
+                    { id: "cert-aws", icon: "cloud", title: "AWS Cloud Practitioner", org: "Amazon" },
+                ];
+
+                let certsGridHtml = '<div class="grid grid-cols-2 md:grid-cols-3 gap-4">';
+                allCertsData.forEach(cert => {
+                    certsGridHtml += `
+                        <div data-modal-target="${cert.id}" class="p-4 rounded-lg border border-white/10 bg-bg transition-all hover:border-secondary cursor-pointer">
+                            <i data-lucide="${cert.icon}" class="text-secondary mb-2 w-6 h-6"></i>
+                            <h3 class="font-bold text-white text-sm">${cert.title}</h3>
+                            <p class="text-xs text-textMuted mt-1">${cert.org}</p>
+                        </div>
+                    `;
+                });
+                certsGridHtml += '</div>';
+                
+                openModal("All Certifications (40+)", certsGridHtml);
+                // Clicks inside this modal will be handled by the general modal listener
+            });
+        }
+
+        // "See All Logs" Button with Pagination
+        const seeAllLogsBtn = document.getElementById('see-all-logs-btn');
+        if (seeAllLogsBtn) {
+            const allLogs = Array.from({ length: 100 }, (_, i) => ({
+                time: `2025-11-${17 - (i % 3)} ${10 - (i % 4)}:${30 + i}`,
+                action: i % 3 === 0 ? "Vulnerability Found" : (i % 3 === 1 ? "CTF Completed" : "System Audit"),
+                target: i % 3 === 0 ? "Client " + String.fromCharCode(65 + (i%5)) : (i % 3 === 1 ? "HackTheBox" : "Internal"),
+                status: i % 3 === 0 ? "CRITICAL" : (i % 3 === 1 ? "SOLVED" : "SECURE")
+            }));
+            const logsPerPage = 10;
+            let currentPage = 1;
+            const totalPages = Math.ceil(allLogs.length / logsPerPage);
+
+            function showLogsPage(page) {
+                currentPage = page;
+                const start = (page - 1) * logsPerPage;
+                const end = start + logsPerPage;
+                const pageLogs = allLogs.slice(start, end);
+
+                let logsHtml = `
+                    <table class="w-full text-left text-sm text-textMuted">
+                        <thead class="bg-card text-xs uppercase font-mono text-primary">
+                            <tr><th class="px-6 py-4">Timestamp</th><th class="px-6 py-4">Action</th><th class="px-6 py-4">Status</th></tr>
+                        </thead>
+                        <tbody class="divide-y divide-white/5 font-mono">
+                `;
+                pageLogs.forEach(log => {
+                    logsHtml += `<tr class="hover:bg-white/5"><td class="px-6 py-4">${log.time}</td><td class="px-6 py-4 text-white">${log.action}</td><td class="px-6 py-4 text-right"><span class="px-2 py-1 bg-primary/20 text-primary rounded text-xs">${log.status}</span></td></tr>`;
+                });
+                logsHtml += `</tbody></table>`;
+                
+                modalContent.innerHTML = logsHtml;
+                document.getElementById('log-page-info').innerText = `Page ${currentPage} of ${totalPages}`;
+                document.getElementById('log-prev-btn').disabled = currentPage === 1;
+                document.getElementById('log-next-btn').disabled = currentPage === totalPages;
+            }
+
+            seeAllLogsBtn.addEventListener('click', () => {
+                openModal("Full Access Log", ""); // Open with empty content first
+                modalLink.classList.add('hidden');
+                modalPagination.classList.remove('hidden');
+                showLogsPage(1);
+            });
+
+            document.getElementById('log-next-btn').addEventListener('click', () => {
+                if (currentPage < totalPages) showLogsPage(currentPage + 1);
+            });
+            document.getElementById('log-prev-btn').addEventListener('click', () => {
+                if (currentPage > 1) showLogsPage(currentPage - 1);
+            });
+        }
+
+
+        // --- 10. ENCRYPTION TOOL LOGIC ---
+        const algos = ["Base64", "Hex", "URL", "ROT13", "Reverse", "AES-256 (Mock)", "MD5 (Mock)", "SHA-256 (Mock)", "Binary (Mock)", "Morse (Mock)", "Caesar (Mock)", "Vigenère (Mock)", "Atbash", "Bcrypt (Mock)", "JWT Decode (Mock)", "XOR (Mock)", "Rabbit (Mock)", "TripleDES (Mock)", "RC4 (Mock)"];
+        let currentAlgo = "Base64";
+        const algoList = document.getElementById('algo-list');
+        const currentAlgoName = document.getElementById('current-algo-name');
+        
+        // Render Algo Buttons
+        if (algoList) {
+            algos.forEach(algo => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left px-4 py-3 rounded-lg text-sm transition-all flex justify-between items-center ${algo === currentAlgo ? 'bg-primary/10 text-primary border border-primary/30' : 'text-textMuted hover:bg-white/5'}`;
+                btn.innerText = algo;
+                btn.onclick = () => {
+                    currentAlgo = algo;
+                    currentAlgoName.innerText = algo;
+                    // Update active class
+                    Array.from(algoList.children).forEach(c => {
+                        if (c.tagName === 'BUTTON') {
+                            c.className = `w-full text-left px-4 py-3 rounded-lg text-sm transition-all flex justify-between items-center ${c.innerText === algo ? 'bg-primary/10 text-primary border border-primary/30' : 'text-textMuted hover:bg-white/5'}`;
+                        }
+                    });
+                };
+                algoList.appendChild(btn);
+            });
+        }
+
+        // Mock Crypto Functions
+        function processCrypto(isDecrypt = false) {
+            const input = document.getElementById('crypto-input').value;
+            const outputEl = document.getElementById('crypto-output');
+            const successEl = document.getElementById('success-msg');
+            if (!input) {
+                outputEl.value = "Error: Input is empty.";
+                return;
+            }
+            
+            let output = "";
+            try {
+                switch(currentAlgo) {
+                    case "Base64":
+                        output = isDecrypt ? atob(input) : btoa(input);
+                        break;
+                    case "Hex":
+                        if (isDecrypt) {
+                            output = input.split(' ').map(hex => String.fromCharCode(parseInt(hex, 16))).join('');
+                        } else {
+                            output = input.split('').map(c => c.charCodeAt(0).toString(16).padStart(2, '0')).join(' ');
+                        }
+                        break;
+                    case "URL":
+                        output = isDecrypt ? decodeURIComponent(input) : encodeURIComponent(input);
+                        break;
+                    case "ROT13":
+                        output = input.replace(/[a-zA-Z]/g, c => String.fromCharCode(c.charCodeAt(0) + (c.toLowerCase() <= 'm' ? 13 : -13)));
+                        break;
+                    case "Reverse":
+                        output = input.split('').reverse().join('');
+                        break;
+                    case "Atbash":
+                         output = input.split('').map(c => {
+                            const code = c.charCodeAt(0);
+                            if (code >= 65 && code <= 90) return String.fromCharCode(90 - (code - 65));
+                            if (code >= 97 && code <= 122) return String.fromCharCode(122 - (code - 97));
+                            return c;
+                        }).join('');
+                        break;
+                    default:
+                        output = `[${isDecrypt ? 'DECRYPT' : 'ENCRYPT'} MOCK for ${currentAlgo}]: ${input.split('').reverse().join('')}`;
+                }
+                outputEl.value = output;
+                successEl.classList.remove('hidden');
+                setTimeout(() => successEl.classList.add('hidden'), 2000);
+            } catch (e) {
+                outputEl.value = `Error: ${e.message}. Invalid input for ${isDecrypt ? 'decryption' : 'encryption'}.`;
+            }
+        }
+
+        function copyOutput() {
+            const copyText = document.getElementById("crypto-output");
+            if (!copyText.value) return;
+            copyText.select();
+            document.execCommand('copy'); // Using execCommand for browser compatibility in iFrames
+            alert("Copied to clipboard!"); // Using alert as modals are complex for this context
+        }
+
+        // Re-render icons on resize (debounced)
+        window.addEventListener('resize', debounce(lucide.createIcons, 250));
+    </script>
 </body>
 </html>
